@@ -1,0 +1,63 @@
+mutation CreateCliAuthSession {
+  createCliAuthSession {
+    sessionId
+    expiresAt
+  }
+}
+
+query GetCliAuthSession($sessionId: String!) {
+  getCliAuthSession(sessionId: $sessionId) {
+    status
+  }
+}
+
+mutation ConsumeCliAuthSession($sessionId: String!) {
+  consumeCliAuthSession(sessionId: $sessionId) {
+    token
+    expireAt
+  }
+}
+
+mutation Logout {
+  logout {
+    success
+  }
+}
+
+query GetCurrentUser {
+  userProfile {
+    id
+    email
+    username
+    tier
+  }
+}
+
+mutation CreateLedger($name: String!, $description: String) {
+  createLedger(name: $name, description: $description) {
+    id
+    name
+    fullName
+    description
+    private
+    createdAt
+  }
+}
+
+query ListUserOwnedLedgers {
+  listUserOwnedLedgers {
+    id
+    name
+    fullName
+    description
+    private
+    createdAt
+    updatedAt
+  }
+}
+
+mutation DeleteLedger($ledgerId: String!) {
+  deleteLedger(ledgerId: $ledgerId) {
+    ledgerId
+  }
+}

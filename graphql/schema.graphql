@@ -1,0 +1,1293 @@
+scalar JSONObject
+
+scalar DateTimeISO
+
+scalar JSON
+
+"""
+The email report status (deprecated)
+"""
+enum ReportStatus {
+  OFF
+  WEEKLY
+  MONTHLY
+}
+
+"""
+Status of a CLI authentication session
+"""
+enum CliAuthStatus {
+  PENDING
+  AUTHORIZED
+  DENIED
+  EXPIRED
+}
+
+"""
+Source type of the feed item
+"""
+enum FeedSource {
+  BLOG
+  LEDGER_RSS
+}
+
+"""
+Budget recurrence interval
+"""
+enum BudgetInterval {
+  DAILY
+  WEEKLY
+  MONTHLY
+  QUARTERLY
+  YEARLY
+}
+
+input JournalQueryInput {
+  account: String
+  filter: String
+  time: String
+  limit: Float = 20
+  offset: Float = 0
+  directiveTypes: [String!]
+  transactionSubtypes: [String!]
+  documentSubtypes: [String!]
+  customSubtypes: [String!]
+}
+
+input PlaintextJournalQueryInput {
+  account: String
+  filter: String
+  time: String
+}
+
+input AccountJournalQueryInput {
+  account: String!
+  filter: String
+  time: String
+  limit: Float = 20
+  offset: Float = 0
+  with_children: Boolean = true
+  conversion: String = "at_cost"
+}
+
+input TransactionToCategorizeInput {
+  rowIndex: Int!
+  date: String!
+  payee: String!
+  description: String!
+  amount: Float!
+}
+
+input LedgerTransactionInput {
+  date: String!
+  flag: String!
+  payee: String
+  narration: String
+  postings: [LedgerPostingInput!]!
+  tags: [String!]
+  links: [String!]
+}
+
+input LedgerPostingInput {
+  units: LedgerAmountInput!
+  account: String!
+  price: LedgerAmountInput
+  flag: String
+}
+
+input LedgerAmountInput {
+  number: String!
+  currency: String!
+}
+
+input LedgerCommodityInput {
+  date: String!
+  currency: String!
+}
+
+input LedgerPriceInput {
+  date: String!
+  currency: String!
+  amount: LedgerAmountInput!
+}
+
+input LedgerNoteInput {
+  date: String!
+  content: String!
+  account: String!
+}
+
+input LedgerBalanceInput {
+  date: String!
+  account: String!
+  amount: LedgerAmountInput!
+}
+
+input LedgerOpenInput {
+  date: String!
+  account: String!
+  currencies: [String!]!
+}
+
+input LedgerCloseInput {
+  date: String!
+  account: String!
+}
+
+input LedgerBudgetInput {
+  date: String!
+  account: String!
+  interval: BudgetInterval!
+  amount: LedgerAmountInput!
+}
+
+input LedgerDocumentInput {
+  date: String!
+  account: String!
+  filename: String!
+  tags: [String!]
+  links: [String!]
+}
+
+input InsertReceiptTransactionInput {
+  date: String!
+  payee: String!
+  description: String!
+  postings: [ReceiptPostingInput!]!
+  documentAccount: String!
+}
+
+input ReceiptPostingInput {
+  account: String!
+  amountNumber: String!
+  amountCurrency: String!
+}
+
+input DeleteSourceSliceInput {
+  entryHash: String!
+  sha256sum: String!
+}
+
+input DeleteMultiSourceSlicesInput {
+  entries: [DeleteMultiSourceSliceItemInput!]!
+}
+
+input DeleteMultiSourceSliceItemInput {
+  entryHash: String!
+  sha256sum: String!
+}
+
+input UpdateSourceSliceInput {
+  entryHash: String!
+  sha256sum: String!
+  newContent: String!
+}
+
+input EntryInput {
+  date: String!
+  flag: String!
+  meta: JSONObject!
+  narration: String!
+  payee: String!
+  postings: [PostingInput!]!
+  type: String!
+}
+
+input PostingInput {
+  account: String!
+  amount: String!
+}
+
+input CreatePRFromPatchInput {
+  ledgerOwner: String!
+  ledgerName: String!
+  title: String!
+  description: String
+  baseBranch: String! = "main"
+  changes: [FileChangeInput!]!
+}
+
+input FileChangeInput {
+  path: String!
+  content: String!
+}
+
+input PlaidTransactionSubmitInput {
+  transactionId: String!
+  targetAccount: String!
+}
+
+type UserProfileResponse {
+  id: String!
+  email: String!
+  locale: String!
+  firstName: String
+  lastName: String
+  emailReportStatus: ReportStatus
+  username: String
+  tier: String!
+  limits: UserLimits!
+}
+
+type UserLimits {
+  ledgersUsed: Float!
+  ledgersMax: Float!
+  collaboratorsPerLedgerMax: Float!
+}
+
+type AiCfoUsageResponse {
+  aiCfoRequestsUsed: Float!
+  aiCfoRequestsMax: Float!
+}
+
+type SearchUser {
+  email: String!
+  username: String!
+}
+
+type ValidateEmailTokenResponse {
+  isValid: Boolean!
+}
+
+type PollCliAuthSessionResponse {
+  status: CliAuthStatus!
+}
+
+type ConsumeCliAuthSessionResponse {
+  token: String!
+  expireAt: String!
+}
+
+type Ledger {
+  id: String!
+  name: String!
+  fullName: String!
+  sshUrl: String!
+  httpUrl: String!
+  empty: Boolean!
+  private: Boolean!
+  createdAt: String!
+  updatedAt: String!
+  size: Float!
+  permissions: Permission
+  description: String
+  isStarred: Boolean
+  attributes: LedgerAttributes!
+  options: LedgerOptions!
+  favaOptions: FavaOptions!
+  bcioOptions: BcioOptions!
+}
+
+type Permission {
+  admin: Boolean!
+  pull: Boolean!
+  push: Boolean!
+}
+
+type LedgerAttributes {
+  accounts: [String!]!
+  tags: [String!]!
+  years: [String!]!
+  links: [String!]!
+  payees: [String!]!
+  currencies: [String!]!
+}
+
+type LedgerOptions {
+  title: String!
+  nameAssets: String!
+  nameEquity: String!
+  nameExpenses: String!
+  nameIncome: String!
+  nameLiabilities: String!
+  accountCurrentConversions: String!
+  accountCurrentEarnings: String!
+  renderCommas: Boolean!
+  operatingCurrency: [String!]!
+}
+
+type FavaOptions {
+  accountJournalIncludeChildren: Boolean!
+  autoReload: Boolean!
+  collapsePattern: [String!]!
+  conversionCurrencies: [String!]!
+  currencyColumn: Int!
+  defaultPage: String!
+  fiscalYearEnd: FiscalYearEnd!
+  indent: Int!
+  invertIncomeLiabilitiesEquity: Boolean!
+  language: String
+  locale: String
+  showAccountsWithZeroBalance: Boolean!
+  showAccountsWithZeroTransactions: Boolean!
+  showClosedAccounts: Boolean!
+  sidebarShowQueries: Int!
+  unrealized: String!
+  upcomingEvents: Int!
+  uptodateIndicatorGreyLookbackDays: Int!
+  useExternalEditor: Boolean!
+}
+
+type FiscalYearEnd {
+  month: Int!
+  day: Int!
+}
+
+type BcioOptions {
+  defaultFile: String!
+  transactionFile: String
+  accountFile: String
+  priceFile: String
+  balanceFile: String
+  noteFile: String
+  padFile: String
+  budgetFile: String
+  receiptBaseFolder: String
+  receiptStorage: String
+  documentFile: String
+}
+
+type LedgerFileContent {
+  name: String!
+  path: String!
+  type: String!
+  sha: String!
+  size: Float!
+  content: String
+  encoding: String
+  lastCommitSha: String
+  lastCommitterDate: String
+  lastAuthorDate: String
+}
+
+type LedgerOverview {
+  netWorthData: [DateAndBalance!]!
+  assetsData: [DateAndBalance!]!
+  assetsHierarchyData: SerializableTreeNode!
+  liabilitiesData: [DateAndBalance!]!
+  liabilitiesHierarchyData: SerializableTreeNode!
+  incomeIntervalData: [DateAndBalanceWithAccountBalance!]!
+  incomeHierarchyData: SerializableTreeNode!
+  incomeData: [DateAndBalance!]!
+  expensesIntervalData: [DateAndBalanceWithAccountBalance!]!
+  expensesHierarchyData: SerializableTreeNode!
+  expensesData: [DateAndBalance!]!
+}
+
+type DateAndBalance {
+  date: String!
+  balance: JSONObject!
+}
+
+type SerializableTreeNode {
+  account: String!
+  balance: JSONObject!
+  balanceChildren: JSONObject!
+  children: [JSONObject!]!
+  hasTxns: Boolean!
+  cost: JSONObject
+  costChildren: JSONObject
+}
+
+type DateAndBalanceWithAccountBalance {
+  date: String!
+  balance: JSONObject!
+  accountBalances: JSONObject!
+}
+
+type CommodityPairWithPrices {
+  base: String!
+  quote: String!
+  prices: [PricePoint!]!
+}
+
+type PricePoint {
+  date: String!
+  value: String!
+}
+
+type IncomeStatementData {
+  netProfitData: [DateAndBalance!]!
+  incomeData: [DateAndBalanceWithAccountBalance!]!
+  expensesData: [DateAndBalanceWithAccountBalance!]!
+  incomeHierarchyData: SerializableTreeNode!
+  expensesHierarchyData: SerializableTreeNode!
+}
+
+type BalanceSheetData {
+  netWorthData: [DateAndBalance!]!
+  assetsData: [DateAndBalance!]!
+  liabilitiesData: [DateAndBalance!]!
+  equityData: [DateAndBalance!]!
+  assetsHierarchyData: SerializableTreeNode!
+  liabilitiesHierarchyData: SerializableTreeNode!
+  equityHierarchyData: SerializableTreeNode!
+}
+
+type TrialBalanceData {
+  incomeHierarchyData: SerializableTreeNode!
+  liabilitiesHierarchyData: SerializableTreeNode!
+  equityHierarchyData: SerializableTreeNode!
+  expensesHierarchyData: SerializableTreeNode!
+  assetsHierarchyData: SerializableTreeNode!
+}
+
+type Event {
+  date: String!
+  type: String!
+  description: String!
+}
+
+type Document {
+  date: String!
+  account: String!
+  filename: String!
+  tags: [String!]
+  links: [String!]
+  meta: JSONObject
+}
+
+type Transaction {
+  date: String!
+  payee: String
+  narration: String
+  postings: [Posting!]!
+}
+
+type Posting {
+  account: String!
+  amount: String!
+  commodity: String!
+  price: String
+}
+
+type BeancountError {
+  filename: String
+  lineno: Float
+  message: String!
+}
+
+type AccountLastEntry {
+  account: String!
+  date: String
+  balance: JSONObject
+}
+
+type EntriesByType {
+  type: String!
+  number: Float!
+}
+
+type AccountReport {
+  linechartData: [DateAndBalance!]!
+  intervalTotalsData: [DateAndBalance!]!
+  accountBalanceData: [DateAndBalance!]!
+}
+
+type IntervalTotalItem {
+  date: String!
+  balance: JSONObject!
+  accountBalances: JSONObject!
+}
+
+type CustomerSubscriptionStatus {
+  hasActiveSubscription: Boolean!
+  subscriptions: [Subscription!]!
+}
+
+type Subscription {
+  id: ID!
+  status: String!
+  currentPeriodStart: DateTimeISO!
+  currentPeriodEnd: DateTimeISO!
+  clientId: String!
+  cancelAt: DateTimeISO
+  canceledAt: DateTimeISO
+  cancelAtPeriodEnd: Boolean!
+  items: [SubscriptionItem!]!
+}
+
+type SubscriptionItem {
+  id: ID!
+  price: SubscriptionPrice!
+  product: SubscriptionProduct
+  quantity: Float!
+}
+
+type SubscriptionPrice {
+  id: ID!
+  amount: Float!
+  currency: String!
+  interval: String!
+  intervalCount: Float
+  trialPeriodDays: Float
+}
+
+type SubscriptionProduct {
+  id: ID!
+  name: String!
+  description: String
+  images: [String!]
+}
+
+type PublicKey {
+  id: Float!
+  fingerprint: String!
+  key: String!
+  lastUsedAt: String
+  title: String!
+  createdAt: String!
+}
+
+type CollaboratorUser {
+  id: Float
+  login: String
+  fullName: String
+  email: String
+  active: Boolean
+  isAdmin: Boolean
+  created: String
+  lastLogin: String
+  permission: String
+}
+
+type LedgerCollaborator {
+  permission: String
+  roleName: String
+  user: User
+}
+
+type User {
+  id: Float
+  login: String
+  fullName: String
+  email: String
+  active: Boolean
+  isAdmin: Boolean
+  created: String
+  lastLogin: String
+}
+
+type QueryResult {
+  table: QueryResultTable
+  text: QueryResultText
+  resultType: String!
+}
+
+type QueryResultTable {
+  types: [QueryColumn!]!
+  rows: [[JSON!]!]!
+  t: String
+}
+
+type QueryColumn {
+  name: String!
+  dtype: String!
+}
+
+type QueryResultText {
+  contents: String!
+  t: String
+}
+
+type JournalResponse {
+  total: Float!
+  data: [JSONObject!]!
+  is_empty: Boolean!
+}
+
+type EntryContext {
+  entry: JSONObject!
+  balances_before: JSONObject
+  balances_after: JSONObject
+  sha256sum: String!
+  slice: String!
+}
+
+type PlaintextJournalResponse {
+  content: String!
+}
+
+type AccountJournalResponse {
+  items: [AccountJournalEntry!]!
+  total: Float!
+  account: String!
+  with_children: Boolean!
+}
+
+type AccountJournalEntry {
+  entry: JSONObject!
+  change: JSONObject!
+  balance: JSONObject!
+}
+
+type LedgerAccountItem {
+  account: String!
+  openedAt: String!
+  closedAt: String
+  balance: JSONObject
+  entryCount: Float!
+  entryHash: String!
+  closeEntryHash: String
+}
+
+type LedgerAssetDownloadUrlResult {
+  downloadUrl: String!
+}
+
+type LedgerMetaResponse {
+  data: LedgerMeta!
+  success: Boolean!
+}
+
+type LedgerMeta {
+  accounts: [String!]!
+  currencies: [String!]!
+  errors: Float!
+  options: Options!
+}
+
+type Options {
+  name_assets: String!
+  name_equity: String!
+  name_expenses: String!
+  name_income: String!
+  name_liabilities: String!
+  operating_currency: [String!]!
+}
+
+type AccountHierarchyResponse {
+  data: [LabeledHierarchyItem!]!
+  success: Boolean!
+}
+
+type LabeledHierarchyItem {
+  type: String!
+  label: String!
+  data: AccountBalance!
+}
+
+type AccountBalance {
+  account: String!
+  balance: JSONObject!
+  balance_children: JSONObject!
+  children: [AccountBalance!]!
+}
+
+type HomeChartsResponse {
+  data: [LabeledChartItem!]!
+  success: Boolean!
+}
+
+type LabeledChartItem {
+  type: String!
+  label: String!
+  data: [ChartItemV2!]!
+}
+
+type ChartItemV2 {
+  balance: JSONObject!
+  date: String!
+  budgets: JSONObject
+}
+
+type JournalEntriesResponse {
+  data: [JournalEntry!]!
+  success: Boolean!
+  pageInfo: PageInfo
+}
+
+type JournalEntry {
+  type: String
+  date: String!
+  meta: EntryMeta
+  flag: String
+  links: [String]
+  narration: String
+  payee: String
+  postings: [JournalEntryPosting!]
+  tags: [String]
+  account: String
+  booking: String
+  currencies: [String!]
+  amount: PostingUnits
+  comment: String
+  filename: String
+  entry_hash: String
+  entry_type: String
+  error: String
+  error_message: String
+  netAmount: Float
+  primaryAccount: String
+  searchableText: String
+}
+
+type EntryMeta {
+  filename: String!
+  lineno: Float!
+}
+
+type JournalEntryPosting {
+  account: String!
+  amount: String
+  cost: String
+  flag: String
+  meta: PostingMeta
+  price: String
+  units: PostingUnits
+}
+
+type PostingMeta {
+  filename: String!
+  lineno: Float!
+}
+
+type PostingUnits {
+  currency: String
+  number: Float
+}
+
+type PageInfo {
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  startCursor: String
+  endCursor: String
+  totalCount: Int
+}
+
+type FeedResponse {
+  items: [FeedItem!]!
+  total: Float!
+  hasMore: Boolean!
+}
+
+type FeedItem {
+  id: String!
+  title: String!
+  summary: String
+  link: String!
+  publishedAt: DateTimeISO!
+  author: String
+  authorAvatar: String
+  source: FeedSource!
+}
+
+type PublicUserProfileResponse {
+  profile: UserProfile!
+  isFollowing: Boolean
+  activities: [UserActivityFeedItem!]!
+  repositories: [UserRepository!]!
+}
+
+type UserProfile {
+  username: String!
+  fullName: String
+  avatarUrl: String
+  bio: String
+  location: String
+  website: String
+  followersCount: Float!
+  followingCount: Float!
+  starredReposCount: Float!
+  created: DateTimeISO
+}
+
+type UserActivityFeedItem {
+  id: String!
+  type: String!
+  content: String!
+  createdAt: DateTimeISO!
+  repoName: String
+  repoFullName: String
+}
+
+type UserRepository {
+  name: String!
+  fullName: String!
+  description: String
+  isPrivate: Boolean!
+  createdAt: DateTimeISO!
+  updatedAt: DateTimeISO!
+}
+
+type UserListResponse {
+  users: [UserListItem!]!
+  total: Float!
+}
+
+type UserListItem {
+  username: String!
+  fullName: String
+  avatarUrl: String
+  bio: String
+}
+
+type RepositoryListResponse {
+  repositories: [RepositoryListItem!]!
+  total: Float!
+}
+
+type RepositoryListItem {
+  name: String!
+  fullName: String!
+  description: String
+  isPrivate: Boolean!
+  updatedAt: DateTimeISO!
+  starsCount: Float
+}
+
+type PullRequestDetails {
+  number: Int!
+  title: String!
+  description: String!
+  state: String!
+  author: String!
+  headBranch: String!
+  baseBranch: String!
+  files: [PRFileChange!]!
+  diff: String
+}
+
+type PRFileChange {
+  filename: String!
+  additions: Int!
+  deletions: Int!
+  changes: Int!
+}
+
+type CommitListItem {
+  sha: String!
+  message: String!
+  author: CommitAuthor!
+  committer: CommitAuthor
+  shortSha: String
+}
+
+type CommitAuthor {
+  name: String!
+  email: String!
+  date: String!
+}
+
+type CommitDetails {
+  sha: String!
+  message: String!
+  author: CommitAuthor!
+  committer: CommitAuthor
+  files: [CommitFileChange!]!
+  stats: CommitStats!
+  diff: String
+  parents: [String!]
+}
+
+type CommitFileChange {
+  filename: String!
+  additions: Int!
+  deletions: Int!
+}
+
+type CommitStats {
+  additions: Int!
+  deletions: Int!
+  total: Int!
+}
+
+type CategorySuggestion {
+  rowIndex: Int!
+  targetAccount: String!
+  confidence: Float!
+  source: String!
+  reasoning: String
+}
+
+type PlaidItemType {
+  id: String!
+  itemId: String!
+  institutionId: String!
+  institutionName: String!
+  status: String!
+  errorCode: String
+  errorMessage: String
+  lastSync: PlaidLastSync
+  createdAt: DateTimeISO!
+  updatedAt: DateTimeISO!
+}
+
+type PlaidLastSync {
+  status: String!
+  timestamp: DateTimeISO!
+  transactionsAdded: Float
+  errorMessage: String
+}
+
+type PlaidAccountType {
+  id: String!
+  plaidItemId: String!
+  accountId: String!
+  accountName: String!
+  accountType: String!
+  accountSubtype: String
+  mask: String
+  ledgerAccount: String
+  enabled: Boolean!
+  createdAt: DateTimeISO!
+  updatedAt: DateTimeISO!
+}
+
+type PlaidTransactionType {
+  id: String!
+  plaidAccountId: String!
+  transactionId: String!
+  date: DateTimeISO!
+  amount: String!
+  merchantName: String
+  name: String!
+  category: String
+  isPending: Boolean!
+  syncedToLedger: Boolean!
+  createdAt: DateTimeISO!
+}
+
+type Receipt {
+  _id: String
+  paymentEmail: String!
+  userId: String!
+  chargeId: String
+  amount: String!
+  currency: String!
+  createAt: DateTimeISO
+  estimatedIotx: Float
+  fulfilledHash: String
+}
+
+type LogoutResponse {
+  success: Boolean!
+}
+
+type TokenAuthResponse {
+  token: String!
+  expireAt: DateTimeISO!
+}
+
+type CreateOneTimeTokenResponse {
+  id: String!
+  expireAt: String!
+}
+
+type SendForgotPasswordLinkResponse {
+  success: Boolean!
+}
+
+type ResetPasswordResponse {
+  success: Boolean!
+}
+
+type PreSignUpResponse {
+  sessionId: String!
+  expireAt: String!
+}
+
+type CreateCliAuthSessionResponse {
+  sessionId: String!
+  expiresAt: String!
+}
+
+type DeleteLedgerResponse {
+  ledgerId: String!
+}
+
+type DeleteLedgerFileResponse {
+  path: String!
+}
+
+type RenameLedgerFileResponse {
+  newPath: String!
+  oldPath: String!
+}
+
+type StarLedgerResponse {
+  success: Boolean!
+  isStarred: Boolean!
+  message: String
+}
+
+type SubscriptionSessionResult {
+  success: Boolean!
+  message: String
+  sessionId: String
+  sessionUrl: String
+}
+
+type SubscriptionActionResult {
+  success: Boolean!
+  message: String
+}
+
+type UpgradeSubscriptionResult {
+  success: Boolean!
+  message: String
+  clientSecret: String
+  subscriptionId: String
+  newTier: String
+}
+
+type DeletePublicKeyResponse {
+  id: Float!
+}
+
+type AddCollaboratorResponse {
+  success: Boolean!
+  message: String
+}
+
+type DeleteCollaboratorResponse {
+  success: Boolean!
+  message: String
+}
+
+type AddLedgerEntryResponse {
+  success: Boolean!
+  message: String
+}
+
+type AddBulkTransactionsResponse {
+  success: Boolean!
+  message: String
+  successCount: Float!
+  failureCount: Float!
+  errors: [BulkTransactionError!]
+}
+
+type BulkTransactionError {
+  index: Float!
+  message: String!
+}
+
+type InsertReceiptResult {
+  success: Boolean!
+}
+
+type DeleteSourceSliceResponse {
+  message: String!
+  entryHash: String!
+}
+
+type DeleteMultiSourceSlicesResponse {
+  message: String!
+  deletedHashes: [String!]!
+}
+
+type UpdateSourceSliceResponse {
+  message: String!
+  entryHash: String!
+  newSha256sum: String!
+}
+
+type AddEntryResponse {
+  data: String
+  success: Boolean!
+}
+
+type FollowUserResponse {
+  success: Boolean!
+  isFollowing: Boolean
+  message: String
+}
+
+type PullRequestResult {
+  success: Boolean!
+  message: String
+  prNumber: Int
+  prUrl: String
+}
+
+type LLMParseResult {
+  rows: [ParsedRow!]!
+}
+
+type ParsedRow {
+  date: String!
+  payee: String!
+  description: String!
+  amount: Float!
+}
+
+type ReceiptParseResult {
+  date: String!
+  payee: String!
+  description: String!
+  amount: Float!
+  sourceAccount: String
+  targetAccount: String
+}
+
+type TempAssetUploadUrl {
+  uploadUrl: String!
+  objectKey: String!
+  expiresIn: Float!
+}
+
+type PlaidLinkToken {
+  linkToken: String!
+}
+
+type PlaidSyncResult {
+  success: Boolean!
+  transactionsFetched: Float!
+  transactionsAdded: Float!
+  transactionsModified: Float!
+  transactionsRemoved: Float!
+  message: String
+}
+
+type PlaidSubmitResult {
+  success: Boolean!
+  addedCount: Float!
+  message: String
+}
+
+type UpdateReportSubscribeResponse {
+  success: Boolean!
+}
+
+type Query {
+  userProfile(userId: String): UserProfileResponse
+  aiCfoUsage: AiCfoUsageResponse!
+  getUserByExactMatch(keyword: String!, includeCurrentUser: String): [SearchUser!]!
+  validateEmailToken(token: String!): ValidateEmailTokenResponse!
+  getCliAuthSession(sessionId: String!): PollCliAuthSessionResponse!
+  listLedgers(page: Float, limit: Float): [Ledger!]!
+  listUserOwnedLedgers(page: Float, limit: Float): [Ledger!]!
+  searchLedgers(q: String, topic: Boolean, includeDesc: Boolean, uid: Float, priorityOwnerId: Float, teamId: Float, starredBy: Float, private: Boolean, isPrivate: Boolean, template: Boolean, archived: Boolean, mode: String, exclusive: Boolean, sort: String, order: String, page: Float, limit: Float): [Ledger!]!
+  getLedger(ledgerId: String!): Ledger!
+  getLedgerFile(path: String!, ledgerId: String!): LedgerFileContent
+  getLedgerDirContent(dirPath: String, ledgerId: String!): [LedgerFileContent!]!
+  getLedgerOverview(account: String, filter: String, time: String, conversion: String!, interval: String!, ledgerId: String!): LedgerOverview!
+  getLedgerAttributes(ledgerId: String!): LedgerAttributes!
+  getLedgerCommodities(ledgerId: String!): [CommodityPairWithPrices!]!
+  getLedgerIncomeStatement(account: String, filter: String, time: String, conversion: String!, interval: String!, ledgerId: String!): IncomeStatementData!
+  getLedgerBalanceSheet(account: String, filter: String, time: String, conversion: String!, interval: String!, ledgerId: String!): BalanceSheetData!
+  getLedgerTrialBalance(account: String, filter: String, time: String, conversion: String!, interval: String!, ledgerId: String!): TrialBalanceData!
+  getLedgerEvents(account: String, filter: String, time: String, ledgerId: String!): [Event!]!
+  getLedgerDocuments(account: String, filter: String, time: String, ledgerId: String!): [Document!]!
+  getLedgerPayeeTransactions(payee: String!, ledgerId: String!): Transaction!
+  getLedgerNarrationTransactions(narration: String!, ledgerId: String!): Transaction!
+  getLedgerPayeeAccounts(payee: String!, ledgerId: String!): [String!]!
+  getLedgerErrors(ledgerId: String!): [BeancountError!]!
+  getLedgerCurrencies(ledgerId: String!): [String!]!
+  getLedgerTags(ledgerId: String!): [String!]!
+  getLedgerYears(ledgerId: String!): [String!]!
+  getLedgerLinks(ledgerId: String!): [String!]!
+  getLedgerNarrations(ledgerId: String!): [String!]!
+  getLedgerPayees(ledgerId: String!): [String!]!
+  getLedgerAccountLastEntries(account: String, filter: String, time: String, ledgerId: String!): [AccountLastEntry!]!
+  getLedgerEntriesCountPerType(account: String, filter: String, time: String, ledgerId: String!): [EntriesByType!]!
+  getLedgerAccountReport(account: String, filter: String, time: String, conversion: String!, interval: String!, accountName: String!, ledgerId: String!): AccountReport!
+  getLedgerIntervalTotals(account: String, filter: String, time: String, conversion: String!, interval: String!, accountName: String!, ledgerId: String!): [IntervalTotalItem!]!
+  health: String!
+  subscriptionStatus: CustomerSubscriptionStatus!
+  listPublicKeys(page: Float, limit: Float): [PublicKey!]!
+  getPublicKey(keyId: Float!): PublicKey
+  listLedgerCollaborators(page: Float, limit: Float, ledgerId: String!): [CollaboratorUser!]!
+  getLedgerCollaboratorPermission(ledgerId: String!, collaborator: String!): LedgerCollaborator!
+  queryShell(ledgerId: String!, query: String!): QueryResult
+  getLedgerJournal(query: JournalQueryInput, ledgerId: String!): JournalResponse!
+  getLedgerEntryContext(entryHash: String!, ledgerId: String!): EntryContext!
+  getLedgerPlaintextJournal(query: PlaintextJournalQueryInput, ledgerId: String!): PlaintextJournalResponse!
+  getLedgerAccountJournal(query: AccountJournalQueryInput!, ledgerId: String!): AccountJournalResponse!
+  getLedgerAccounts(ledgerId: String!): [String!]!
+  getLedgerAvailableAccounts(ledgerId: String!): [String!]!
+  getLedgerAccountDirectives(ledgerId: String!): [LedgerAccountItem!]!
+  getLedgerAssetDownloadUrl(filename: String!, ledgerRepoId: Int!): LedgerAssetDownloadUrlResult!
+  ledgerMeta(userId: String!, ledgerId: String): LedgerMetaResponse!
+  accountHierarchy(userId: String!, ledgerId: String): AccountHierarchyResponse!
+  homeCharts(userId: String!, ledgerId: String): HomeChartsResponse!
+  journalEntries(first: Int, after: String, last: Int, before: String, detailed: Boolean, searchQuery: String, accountFilter: String, amountMin: Float, amountMax: Float, entryTypes: [String!], sortBy: String, sortOrder: String, groupBy: String): JournalEntriesResponse!
+  featureFlags(userId: String!): JSONObject!
+  getFeed(offset: Float!, limit: Float!, source: String, locale: String): FeedResponse!
+  getUserProfile(username: String!): PublicUserProfileResponse!
+  getUserFollowers(username: String!, page: Float, limit: Float): UserListResponse!
+  getUserFollowing(username: String!, page: Float, limit: Float): UserListResponse!
+  getUserStarredRepos(username: String!, page: Float, limit: Float): RepositoryListResponse!
+  getPullRequestDetails(prNumber: Int!, ledgerName: String!, ledgerOwner: String!): PullRequestDetails!
+  listCommits(limit: Int!, page: Int!, branch: String!, ledgerName: String!, ledgerOwner: String!): [CommitListItem!]!
+  getCommitDetails(sha: String!, ledgerName: String!, ledgerOwner: String!): CommitDetails!
+  suggestTransactionCategoriesWithLLM(transactions: [TransactionToCategorizeInput!]!, ledgerId: String!): [CategorySuggestion!]!
+  getPlaidItems: [PlaidItemType!]!
+  getPlaidItem(id: String!): PlaidItemType!
+  getPlaidAccounts(itemId: String!): [PlaidAccountType!]!
+  getUnsyncedPlaidTransactions(accountId: String!): [PlaidTransactionType!]!
+  suggestPlaidTransactionCategories(accountId: String!, ledgerId: String!): [CategorySuggestion!]!
+  paymentHistory: [Receipt!]!
+}
+
+type Mutation {
+  deleteAccount: Boolean!
+  logout: LogoutResponse!
+  signIn(email: String!, password: String!): TokenAuthResponse!
+  refreshToken: TokenAuthResponse!
+  signInWithOneTimeToken(token: String!): TokenAuthResponse!
+  createOneTimeToken: CreateOneTimeTokenResponse!
+  updateUsername(username: String!): UserProfileResponse!
+  updateProfile(firstName: String, lastName: String): UserProfileResponse!
+  sendForgotPasswordLink(email: String!): SendForgotPasswordLinkResponse!
+  resetPassword(token: String!, newPassword: String!): ResetPasswordResponse!
+  preSignUp(email: String!, password: String!, firstName: String!, lastName: String!, username: String, inviteSrc: String, inviteBy: String, withDefaultLedger: Boolean): PreSignUpResponse!
+  finishSignUp(sessionId: String!, otp: String!): TokenAuthResponse!
+  createCliAuthSession: CreateCliAuthSessionResponse!
+  confirmCliAuthSession(sessionId: String!): Boolean!
+  denyCliAuthSession(sessionId: String!): Boolean!
+  consumeCliAuthSession(sessionId: String!): ConsumeCliAuthSessionResponse!
+  createLedger(name: String!, description: String, private: Boolean): Ledger!
+  updateLedger(name: String, description: String, private: Boolean, ledgerId: String!): Ledger!
+  deleteLedger(ledgerId: String!): DeleteLedgerResponse!
+  createLedgerFile(path: String!, content: String!, message: String, ledgerId: String!): LedgerFileContent!
+  updateLedgerFile(path: String!, content: String!, sha: String!, message: String, ledgerId: String!): LedgerFileContent!
+  deleteLedgerFile(path: String!, sha: String!, message: String, ledgerId: String!): DeleteLedgerFileResponse!
+  renameLedgerFile(newPath: String!, oldPath: String!, message: String, ledgerId: String!): RenameLedgerFileResponse!
+  starLedger(ledgerId: String!): StarLedgerResponse!
+  unstarLedger(ledgerId: String!): StarLedgerResponse!
+  createSubscriptionSession(priceId: String!, clientId: String!): SubscriptionSessionResult!
+  createStripePortalSession(clientId: String!): SubscriptionSessionResult!
+  cancelSubscription(clientId: String!, subscriptionId: String!): SubscriptionActionResult!
+  upgradeSubscription(priceId: String!, clientId: String!): UpgradeSubscriptionResult!
+  createPublicKey(key: String!, title: String!, readOnly: Boolean): PublicKey!
+  deletePublicKey(keyId: Float!): DeletePublicKeyResponse!
+  addOrUpdateLedgerCollaborator(ledgerId: String!, collaborator: String!, permission: String): AddCollaboratorResponse!
+  deleteLedgerCollaborator(ledgerId: String!, collaborator: String!): DeleteCollaboratorResponse!
+  removeSelfFromRepo(ledgerId: String!): DeleteCollaboratorResponse!
+  addEntryTransaction(transaction: LedgerTransactionInput!, ledgerId: String!): AddLedgerEntryResponse!
+  addEntryCommodity(commodity: LedgerCommodityInput!, ledgerId: String!): AddLedgerEntryResponse!
+  addEntryPrice(price: LedgerPriceInput!, ledgerId: String!): AddLedgerEntryResponse!
+  addEntryNote(note: LedgerNoteInput!, ledgerId: String!): AddLedgerEntryResponse!
+  addEntryBalance(balance: LedgerBalanceInput!, ledgerId: String!): AddLedgerEntryResponse!
+  addBulkTransactions(transactions: [LedgerTransactionInput!]!, ledgerId: String!): AddBulkTransactionsResponse!
+  addEntryOpen(open: LedgerOpenInput!, ledgerId: String!): AddLedgerEntryResponse!
+  addEntryClose(close: LedgerCloseInput!, ledgerId: String!): AddLedgerEntryResponse!
+  addEntryBudget(budget: LedgerBudgetInput!, ledgerId: String!): AddLedgerEntryResponse!
+  addEntryDocument(document: LedgerDocumentInput!, ledgerId: String!): AddLedgerEntryResponse!
+  insertReceiptTransaction(input: InsertReceiptTransactionInput!, receiptObjectKey: String!, ledgerId: String!): InsertReceiptResult!
+  deleteLedgerEntrySourceSlice(input: DeleteSourceSliceInput!, ledgerId: String!): DeleteSourceSliceResponse!
+  deleteMultipleLedgerEntrySourceSlices(input: DeleteMultiSourceSlicesInput!, ledgerId: String!): DeleteMultiSourceSlicesResponse!
+  updateLedgerEntrySourceSlice(input: UpdateSourceSliceInput!, ledgerId: String!): UpdateSourceSliceResponse!
+  addEntries(entriesInput: [EntryInput!]!, ledgerId: String): AddEntryResponse!
+  followUser(username: String!): FollowUserResponse!
+  unfollowUser(username: String!): FollowUserResponse!
+  createPullRequestFromPatch(input: CreatePRFromPatchInput!): PullRequestResult!
+  approvePullRequest(prNumber: Int!, ledgerName: String!, ledgerOwner: String!): PullRequestResult!
+  rejectPullRequest(prNumber: Int!, ledgerName: String!, ledgerOwner: String!): PullRequestResult!
+  parseFileWithLLM(fileFormat: String!, s3ObjectKey: String!): LLMParseResult!
+  parseReceiptWithLLM(ledgerId: String!, s3ObjectKey: String!): ReceiptParseResult!
+  generateTempAssetUploadUrl(filename: String, mimeType: String): TempAssetUploadUrl!
+  createPlaidLinkToken: PlaidLinkToken!
+  createPlaidUpdateModeLinkToken(itemId: String!): PlaidLinkToken!
+  exchangePlaidPublicToken(publicToken: String!): PlaidItemType!
+  updatePlaidAccountMapping(ledgerAccount: String!, accountId: String!): Boolean!
+  refreshPlaidItemStatus(itemId: String!): PlaidItemType!
+  unlinkPlaidItem(itemId: String!): Boolean!
+  syncPlaidTransactions(itemId: String!): PlaidSyncResult!
+  submitPlaidTransactionsToLedger(transactions: [PlaidTransactionSubmitInput!]!, ledgerId: String!): PlaidSubmitResult!
+  addPushToken(token: String!): Boolean!
+  sendPushNotification(pushToken: String!, message: String!, data: JSONObject!): Boolean!
+  updateReportSubscribe(userId: String!, status: ReportStatus!): UpdateReportSubscribeResponse
+}

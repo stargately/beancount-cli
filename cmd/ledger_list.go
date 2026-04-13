@@ -1,0 +1,72 @@
+package cmd
+
+import (
+	"context"
+	"fmt"
+	"strings"
+	"text/tabwriter"
+
+	"github.com/spf13/cobra"
+
+	"beancount.io/beancount-cli/generated"
+	"beancount.io/beancount-cli/internal/config"
+	"beancount.io/beancount-cli/internal/credentials"
+	"beancount.io/beancount-cli/internal/gqlclient"
+)
+
+var ledgerListCmd = &cobra.Command{
+	Use:   "list",
+	Short: "List your ledgers",
+	RunE:  runLedgerList,
+}
+
+func init() {
+	ledgerCmd.AddCommand(ledgerListCmd)
+}
+
+func runLedgerList(cmd *cobra.Command, _ []string) error {
+	creds, err := credentials.Load()
+	if err != nil {
+		return fmt.Errorf("failed to read credentials: %w", err)
+	}
+	if creds == nil || creds.Token == "" {
+		return fmt.Errorf("not logged in. Run 'beancount-cli login' to authenticate")
+	}
+	if creds.IsExpired() {
+		return fmt.Errorf("your session has expired. Run 'beancount-cli login' to re-authenticate")
+	}
+
+	cfg := config.Load()
+	client := gqlclient.NewAuthed(cfg.APIURL, creds.Token)
+
+	resp, err := generated.ListUserOwnedLedgers(context.Background(), client)
+	if err != nil {
+		return fmt.Errorf("failed to list ledgers: %w", err)
+	}
+
+	ledgers := resp.ListUserOwnedLedgers
+	if len(ledgers) == 0 {
+		fmt.Fprintln(cmd.OutOrStdout(), "No ledgers found.")
+		return nil
+	}
+
+	w := tabwriter.NewWriter(cmd.OutOrStdout(), 0, 0, 2, ' ', 0)
+	fmt.Fprintln(w, "ID\tNAME\tDESCRIPTION\tPRIVATE\tCREATED")
+	fmt.Fprintln(w, strings.Repeat("-", 2)+"\t"+strings.Repeat("-", 4)+"\t"+strings.Repeat("-", 11)+"\t"+strings.Repeat("-", 7)+"\t"+strings.Repeat("-", 7))
+	for _, l := range ledgers {
+		desc := "(none)"
+		if l.Description != "" {
+			desc = l.Description
+		}
+		private := "no"
+		if l.Private {
+			private = "yes"
+		}
+		created := l.CreatedAt
+		if len(created) >= 10 {
+			created = created[:10]
+		}
+		fmt.Fprintf(w, "%s\t%s\t%s\t%s\t%s\n", l.Id, l.Name, desc, private, created)
+	}
+	return w.Flush()
+}
