@@ -20,6 +20,11 @@ Environment variables:
 	SilenceUsage: true,
 }
 
+// SetVersion sets the version string shown by --version.
+func SetVersion(v string) {
+	rootCmd.Version = v
+}
+
 // Execute runs the root command and exits on error.
 func Execute() {
 	if err := rootCmd.Execute(); err != nil {
