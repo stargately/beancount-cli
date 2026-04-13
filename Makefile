@@ -1,7 +1,7 @@
 BINARY := beancount-cli
 BUILD_DIR := dist
 
-.PHONY: build clean codegen update-schema lint help
+.PHONY: build clean codegen update-schema lint format help
 
 ## help: show this help message
 help:
@@ -28,6 +28,10 @@ update-schema:
 	  | python3 scripts/introspection-to-sdl.py > graphql/schema.graphql
 	$(MAKE) codegen
 	@echo "Schema updated and client regenerated."
+
+## format: format Go source files with gofmt
+format:
+	gofmt -w .
 
 ## lint: run go vet
 lint:
