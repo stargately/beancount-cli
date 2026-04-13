@@ -12,10 +12,16 @@ A Go command-line tool for [Beancount](https://beancount.io). It authenticates v
 
 ## Installation
 
-**Prerequisites:** Go 1.23+
+**Homebrew (macOS / Linux):**
 
 ```sh
-# Build the binary
+brew tap stargately/beancount-cli
+brew install beancount-cli
+```
+
+**From source** (requires Go 1.23+):
+
+```sh
 make build
 
 # Binary is output to ./dist/beancount-cli
@@ -73,6 +79,36 @@ Credentials are stored locally at `~/.beancount/credentials.json` (permissions `
 ```
 
 Run `beancount-cli logout` to revoke the token and delete this file.
+
+## Release
+
+Releases are automated via GoReleaser. The GitHub Actions workflow (`.github/workflows/release.yml`) triggers on `v*` tag pushes and handles everything end-to-end. For local use, you need [GoReleaser](https://goreleaser.com/install/) and the [GitHub CLI](https://cli.github.com/) installed and authenticated (`gh auth login`).
+
+### 1. Build artifacts only (no publish)
+
+Builds all platform binaries and archives into `./dist/` without publishing anything. Does not require a git tag.
+
+```sh
+goreleaser release --clean --snapshot
+```
+
+### 2. Build and publish to GitHub Release only
+
+```sh
+git tag v0.1.0
+git push origin v0.1.0
+GITHUB_TOKEN=$(gh auth token) goreleaser release --clean --skip=homebrew
+```
+
+### 3. Full release (GitHub + Homebrew)
+
+```sh
+git tag v0.1.0
+git push origin v0.1.0
+GITHUB_TOKEN=$(gh auth token) TAP_GITHUB_TOKEN=$(gh auth token) goreleaser release --clean
+```
+
+---
 
 ## Development
 
