@@ -68,3 +68,17 @@ mutation AddEntryTransaction($ledgerId: String!, $transaction: LedgerTransaction
     message
   }
 }
+
+mutation AddEntryOpen($ledgerId: String!, $open: LedgerOpenInput!) {
+  addEntryOpen(ledgerId: $ledgerId, open: $open) {
+    success
+    message
+  }
+}
+
+mutation AddEntryClose($ledgerId: String!, $close: LedgerCloseInput!) {
+  addEntryClose(ledgerId: $ledgerId, close: $close) {
+    success
+    message
+  }
+}
