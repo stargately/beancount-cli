@@ -15,6 +15,24 @@ brew tap stargately/beancount-cli
 brew install beancount-cli
 ```
 
+**Install script (macOS / Linux):**
+
+```sh
+curl -sf https://raw.githubusercontent.com/stargately/beancount-cli/main/scripts/install.sh | sh
+```
+
+Install a specific version or to a custom directory:
+
+```sh
+# Specific version
+curl -sf https://raw.githubusercontent.com/stargately/beancount-cli/main/scripts/install.sh | VERSION=v0.1.0 sh
+
+# Custom install directory
+curl -sf https://raw.githubusercontent.com/stargately/beancount-cli/main/scripts/install.sh | BINDIR=$HOME/.local/bin sh
+```
+
+Installs to `/usr/local/bin` by default (uses `sudo` if needed). Requires `curl` and `tar`.
+
 **From source** (requires Go 1.23+):
 
 ```sh
