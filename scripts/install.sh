@@ -5,15 +5,17 @@
 # Usage:
 #   curl -sf https://raw.githubusercontent.com/stargately/beancount-cli/main/scripts/install.sh | sh
 #   curl -sf https://raw.githubusercontent.com/stargately/beancount-cli/main/scripts/install.sh | VERSION=v0.1.0 sh
-#   curl -sf https://raw.githubusercontent.com/stargately/beancount-cli/main/scripts/install.sh | BINDIR=/usr/local/bin sh
+#   curl -sf https://raw.githubusercontent.com/stargately/beancount-cli/main/scripts/install.sh | BINDIR=$HOME/.local/bin sh
 
 set -e
 set -u
 
+ORIGINAL_PATH="$PATH"
+
 BINARY="beancount-cli"
 OWNER="stargately"
 REPO="beancount-cli"
-BINDIR="${BINDIR:-/usr/local/bin}"
+BINDIR="${BINDIR:-${HOME}/.local/bin}"
 VERSION="${VERSION:-}"
 
 usage() {
@@ -26,8 +28,8 @@ USAGE:
 ENVIRONMENT VARIABLES:
   VERSION   Release version to install (default: latest)
             e.g. VERSION=v0.1.0
-  BINDIR    Directory to install the binary (default: /usr/local/bin)
-            e.g. BINDIR=\$HOME/.local/bin
+  BINDIR    Directory to install the binary (default: ~/.local/bin)
+            e.g. BINDIR=/usr/local/bin
 EOF
   exit 2
 }
@@ -80,8 +82,39 @@ main() {
 
   install_binary "${TMPDIR}"
 
+  if [ "${BINDIR}" = "${HOME}/.local/bin" ]; then
+    ensure_user_local_bin_on_path
+    warn_shell_path_missing_dir "${BINDIR}"
+  fi
+
   echo "Installed ${BINARY} to ${BINDIR}/${BINARY}"
   "${BINDIR}/${BINARY}" --version 2>/dev/null || true
+}
+
+ensure_user_local_bin_on_path() {
+  target="$HOME/.local/bin"
+  mkdir -p "$target"
+  export PATH="$target:$PATH"
+  path_line='export PATH="$HOME/.local/bin:$PATH"'
+  for rc in "$HOME/.bashrc" "$HOME/.zshrc"; do
+    if [ -f "$rc" ] && ! grep -q ".local/bin" "$rc"; then
+      echo "$path_line" >> "$rc"
+    fi
+  done
+}
+
+warn_shell_path_missing_dir() {
+  dir="${1%/}"
+  if [ -z "$dir" ]; then
+    return 0
+  fi
+  case ":${ORIGINAL_PATH}:" in
+    *":${dir}:"*) return 0 ;;
+  esac
+  echo ""
+  echo "NOTE: ${dir} was not found in your PATH."
+  echo "      It has been added to your current session and appended to ~/.bashrc / ~/.zshrc."
+  echo "      Restart your terminal (or run: export PATH=\"${dir}:\$PATH\") to use ${BINARY}."
 }
 
 uname_os() {
