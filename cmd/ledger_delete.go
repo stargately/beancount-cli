@@ -13,11 +13,11 @@ import (
 )
 
 var ledgerDeleteCmd = &cobra.Command{
-	Use:   "delete <ledger-id>",
+	Use:   "delete <fullname>",
 	Short: "Delete a ledger",
-	Long: `Delete a ledger by its ID.
+	Long: `Delete a ledger by its full name.
 
-The ledger ID can be found with 'beancount-cli ledger list'.
+The full name can be found with 'beancount-cli ledger list'.
 
 WARNING: This action is irreversible. All ledger data will be permanently deleted.`,
 	Args: cobra.ExactArgs(1),
@@ -43,12 +43,28 @@ func runLedgerDelete(cmd *cobra.Command, args []string) error {
 	cfg := config.Load()
 	client := gqlclient.NewAuthed(cfg.APIURL, creds.Token)
 
-	ledgerID := args[0]
+	fullName := args[0]
+	resp, err := generated.ListUserOwnedLedgers(context.Background(), client)
+	if err != nil {
+		return fmt.Errorf("failed to list ledgers: %w", err)
+	}
+
+	var ledgerID string
+	for _, l := range resp.ListUserOwnedLedgers {
+		if l.FullName == fullName {
+			ledgerID = l.Id
+			break
+		}
+	}
+	if ledgerID == "" {
+		return fmt.Errorf("ledger not found: %s", fullName)
+	}
+
 	_, err = generated.DeleteLedger(context.Background(), client, ledgerID)
 	if err != nil {
 		return fmt.Errorf("failed to delete ledger: %w", err)
 	}
 
-	fmt.Fprintf(cmd.OutOrStdout(), "Deleted ledger: %s\n", ledgerID)
+	fmt.Fprintf(cmd.OutOrStdout(), "Deleted ledger: %s\n", fullName)
 	return nil
 }
