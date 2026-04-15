@@ -4,9 +4,6 @@ on:
   pull_request:
     branches:
       - main
-  push:
-    branches:
-      - main
 
 jobs:
   ci:
@@ -34,3 +31,6 @@ jobs:
 
       - name: Build
         run: go build ./...
+
+      - name: Test
+        run: go test ./...

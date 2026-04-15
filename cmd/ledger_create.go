@@ -7,6 +7,7 @@ import (
 	"github.com/spf13/cobra"
 
 	"beancount.io/beancount-cli/generated"
+	"beancount.io/beancount-cli/internal/utils"
 )
 
 var ledgerCreateCmd = &cobra.Command{
@@ -32,7 +33,7 @@ func init() {
 }
 
 func runLedgerCreate(cmd *cobra.Command, _ []string) error {
-	client, err := newAuthedClient()
+	client, err := utils.NewAuthedClient()
 	if err != nil {
 		return err
 	}

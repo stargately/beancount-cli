@@ -9,6 +9,7 @@ import (
 	"github.com/spf13/cobra"
 
 	"beancount.io/beancount-cli/generated"
+	"beancount.io/beancount-cli/internal/utils"
 )
 
 var transactionAddCmd = &cobra.Command{
@@ -68,70 +69,65 @@ func parsePosting(s string) (generated.LedgerPostingInput, error) {
 	}, nil
 }
 
-func runTransactionAdd(cmd *cobra.Command, _ []string) error {
-	if len(txPostings) == 0 {
-		return fmt.Errorf("at least one --posting is required")
+// buildTransactionInput constructs a LedgerTransactionInput from raw CLI values.
+// Pure function — no I/O, no network calls.
+func buildTransactionInput(
+	flag, date, payee, narration string,
+	postingStrs, tags, links []string,
+) (generated.LedgerTransactionInput, error) {
+	if len(postingStrs) == 0 {
+		return generated.LedgerTransactionInput{}, fmt.Errorf("at least one --posting is required")
 	}
 
-	date := txDate
 	if date == "" {
 		date = time.Now().Format("2006-01-02")
 	}
 
-	postings := make([]generated.LedgerPostingInput, 0, len(txPostings))
-	for _, p := range txPostings {
+	postings := make([]generated.LedgerPostingInput, 0, len(postingStrs))
+	for _, p := range postingStrs {
 		posting, err := parsePosting(p)
 		if err != nil {
-			return err
+			return generated.LedgerTransactionInput{}, err
 		}
 		postings = append(postings, posting)
 	}
 
-	client, err := newAuthedClient()
-	if err != nil {
-		return err
-	}
-
-	ledgersResp, err := generated.ListUserOwnedLedgers(context.Background(), client)
-	if err != nil {
-		return fmt.Errorf("failed to list ledgers: %w", err)
-	}
-
-	var ledgerID string
-	for _, l := range ledgersResp.ListUserOwnedLedgers {
-		if l.FullName == txLedger {
-			ledgerID = l.Id
-			break
-		}
-	}
-	if ledgerID == "" {
-		return fmt.Errorf("ledger not found: %s", txLedger)
-	}
-
-	tags := txTags
 	if tags == nil {
 		tags = []string{}
 	}
-	links := txLinks
 	if links == nil {
 		links = []string{}
 	}
 
 	tx := generated.LedgerTransactionInput{
 		Date:     date,
-		Flag:     txFlag,
+		Flag:     flag,
 		Postings: postings,
 		Tags:     tags,
 		Links:    links,
 	}
-	if txPayee != "" {
-		tx.Payee = &txPayee
+	if payee != "" {
+		tx.Payee = &payee
 	}
-	if txNarration != "" {
-		tx.Narration = &txNarration
+	if narration != "" {
+		tx.Narration = &narration
 	}
 
-	resp, err := generated.AddEntryTransaction(context.Background(), client, ledgerID, tx)
+	return tx, nil
+}
+
+func runTransactionAdd(cmd *cobra.Command, _ []string) error {
+	tx, err := buildTransactionInput(txFlag, txDate, txPayee, txNarration, txPostings, txTags, txLinks)
+	if err != nil {
+		return err
+	}
+
+	client, err := utils.NewAuthedClient()
+	if err != nil {
+		return err
+	}
+
+	resp, err := generated.AddEntryTransaction(context.Background(), client, utils.LedgerID(txLedger), tx)
 	if err != nil {
 		return fmt.Errorf("failed to add transaction: %w", err)
 	}
@@ -145,6 +141,6 @@ func runTransactionAdd(cmd *cobra.Command, _ []string) error {
 		return fmt.Errorf("server rejected transaction: %s", msg)
 	}
 
-	fmt.Fprintf(cmd.OutOrStdout(), "Transaction added to %s on %s\n", txLedger, date)
+	fmt.Fprintf(cmd.OutOrStdout(), "Transaction added to %s on %s\n", txLedger, tx.Date)
 	return nil
 }

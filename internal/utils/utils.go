@@ -1,6 +1,7 @@
-package cmd
+package utils
 
 import (
+	"encoding/base64"
 	"fmt"
 
 	"github.com/Khan/genqlient/graphql"
@@ -10,10 +11,15 @@ import (
 	"beancount.io/beancount-cli/internal/gqlclient"
 )
 
-// newAuthedClient validates the stored credentials and returns an authenticated
+// LedgerID computes the GraphQL ledger ID from its full name (e.g. "user/mybook").
+func LedgerID(fullName string) string {
+	return base64.URLEncoding.EncodeToString([]byte(fullName))
+}
+
+// NewAuthedClient validates the stored credentials and returns an authenticated
 // GraphQL client. Returns an error if the user is not logged in or the session
 // has expired.
-func newAuthedClient() (graphql.Client, error) {
+func NewAuthedClient() (graphql.Client, error) {
 	creds, err := credentials.Load()
 	if err != nil {
 		return nil, fmt.Errorf("failed to read credentials: %w", err)
