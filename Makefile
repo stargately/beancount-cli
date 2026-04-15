@@ -41,12 +41,9 @@ format:
 lint:
 	go vet ./...
 
-## release: tag a new version and publish via goreleaser (requires VERSION=x.y.z)
+## release: interactively tag a new version and publish via goreleaser
 release:
-	@test -n "$(VERSION)" || { echo "Usage: make release VERSION=x.y.z"; exit 1; }
-	git tag -a v$(VERSION) -m "Release v$(VERSION)"
-	git push origin v$(VERSION)
-	goreleaser release --clean
+	@sh scripts/release.sh
 
 ## clean: remove build artifacts
 clean:
