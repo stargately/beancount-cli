@@ -51,8 +51,8 @@ func runLedgerList(cmd *cobra.Command, _ []string) error {
 	}
 
 	w := tabwriter.NewWriter(cmd.OutOrStdout(), 0, 0, 2, ' ', 0)
-	fmt.Fprintln(w, "ID\tNAME\tDESCRIPTION\tPRIVATE\tCREATED")
-	fmt.Fprintln(w, strings.Repeat("-", 2)+"\t"+strings.Repeat("-", 4)+"\t"+strings.Repeat("-", 11)+"\t"+strings.Repeat("-", 7)+"\t"+strings.Repeat("-", 7))
+	fmt.Fprintln(w, "NAME\tFULLNAME\tDESCRIPTION\tPRIVATE\tCREATED")
+	fmt.Fprintln(w, strings.Repeat("-", 4)+"\t"+strings.Repeat("-", 8)+"\t"+strings.Repeat("-", 11)+"\t"+strings.Repeat("-", 7)+"\t"+strings.Repeat("-", 7))
 	for _, l := range ledgers {
 		desc := "(none)"
 		if l.Description != "" {
@@ -66,7 +66,7 @@ func runLedgerList(cmd *cobra.Command, _ []string) error {
 		if len(created) >= 10 {
 			created = created[:10]
 		}
-		fmt.Fprintf(w, "%s\t%s\t%s\t%s\t%s\n", l.Id, l.Name, desc, private, created)
+		fmt.Fprintf(w, "%s\t%s\t%s\t%s\t%s\n", l.Name, l.FullName, desc, private, created)
 	}
 	return w.Flush()
 }
