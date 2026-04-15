@@ -61,3 +61,10 @@ mutation DeleteLedger($ledgerId: String!) {
     ledgerId
   }
 }
+
+mutation AddEntryTransaction($ledgerId: String!, $transaction: LedgerTransactionInput!) {
+  addEntryTransaction(ledgerId: $ledgerId, transaction: $transaction) {
+    success
+    message
+  }
+}

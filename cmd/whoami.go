@@ -47,9 +47,9 @@ func runWhoami(cmd *cobra.Command, _ []string) error {
 	}
 
 	profile := resp.UserProfile
-	username := profile.Username
-	if username == "" {
-		username = "(not set)"
+	username := "(not set)"
+	if profile.Username != nil && *profile.Username != "" {
+		username = *profile.Username
 	}
 
 	fmt.Fprintf(cmd.OutOrStdout(), "Email:    %s\n", profile.Email)

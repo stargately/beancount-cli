@@ -4,11 +4,7 @@ A Go command-line tool for [Beancount](https://beancount.io). It authenticates v
 
 ## Commands
 
-| Command   | Description                                      |
-|-----------|--------------------------------------------------|
-| `login`   | Authenticate via browser (device auth flow)      |
-| `logout`  | Revoke the current session and clear credentials |
-| `whoami`  | Display the currently authenticated user         |
+See [docs/commands.md](docs/commands.md) for the full command reference including flags and examples.
 
 ## Installation
 
