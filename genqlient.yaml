@@ -3,3 +3,4 @@ operations:
   - graphql/operations.graphql
 generated: generated/genqlient.go
 package: generated
+optional: pointer

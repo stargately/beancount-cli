@@ -49,7 +49,7 @@ func runLedgerCreate(cmd *cobra.Command, _ []string) error {
 	cfg := config.Load()
 	client := gqlclient.NewAuthed(cfg.APIURL, creds.Token)
 
-	resp, err := generated.CreateLedger(context.Background(), client, ledgerCreateName, ledgerCreateDesc)
+	resp, err := generated.CreateLedger(context.Background(), client, ledgerCreateName, &ledgerCreateDesc)
 	if err != nil {
 		return fmt.Errorf("failed to create ledger: %w", err)
 	}

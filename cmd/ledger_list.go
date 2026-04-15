@@ -55,8 +55,8 @@ func runLedgerList(cmd *cobra.Command, _ []string) error {
 	fmt.Fprintln(w, strings.Repeat("-", 4)+"\t"+strings.Repeat("-", 8)+"\t"+strings.Repeat("-", 11)+"\t"+strings.Repeat("-", 7)+"\t"+strings.Repeat("-", 7))
 	for _, l := range ledgers {
 		desc := "(none)"
-		if l.Description != "" {
-			desc = l.Description
+		if l.Description != nil && *l.Description != "" {
+			desc = *l.Description
 		}
 		private := "no"
 		if l.Private {

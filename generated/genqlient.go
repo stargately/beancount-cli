@@ -8,6 +8,32 @@ import (
 	"github.com/Khan/genqlient/graphql"
 )
 
+// AddEntryTransactionAddEntryTransactionAddLedgerEntryResponse includes the requested fields of the GraphQL type AddLedgerEntryResponse.
+type AddEntryTransactionAddEntryTransactionAddLedgerEntryResponse struct {
+	Success bool    `json:"success"`
+	Message *string `json:"message"`
+}
+
+// GetSuccess returns AddEntryTransactionAddEntryTransactionAddLedgerEntryResponse.Success, and is useful for accessing the field via an interface.
+func (v *AddEntryTransactionAddEntryTransactionAddLedgerEntryResponse) GetSuccess() bool {
+	return v.Success
+}
+
+// GetMessage returns AddEntryTransactionAddEntryTransactionAddLedgerEntryResponse.Message, and is useful for accessing the field via an interface.
+func (v *AddEntryTransactionAddEntryTransactionAddLedgerEntryResponse) GetMessage() *string {
+	return v.Message
+}
+
+// AddEntryTransactionResponse is returned by AddEntryTransaction on success.
+type AddEntryTransactionResponse struct {
+	AddEntryTransaction AddEntryTransactionAddEntryTransactionAddLedgerEntryResponse `json:"addEntryTransaction"`
+}
+
+// GetAddEntryTransaction returns AddEntryTransactionResponse.AddEntryTransaction, and is useful for accessing the field via an interface.
+func (v *AddEntryTransactionResponse) GetAddEntryTransaction() AddEntryTransactionAddEntryTransactionAddLedgerEntryResponse {
+	return v.AddEntryTransaction
+}
+
 // Status of a CLI authentication session
 type CliAuthStatus string
 
@@ -79,12 +105,12 @@ func (v *CreateCliAuthSessionResponse) GetCreateCliAuthSession() CreateCliAuthSe
 
 // CreateLedgerCreateLedger includes the requested fields of the GraphQL type Ledger.
 type CreateLedgerCreateLedger struct {
-	Id          string `json:"id"`
-	Name        string `json:"name"`
-	FullName    string `json:"fullName"`
-	Description string `json:"description"`
-	Private     bool   `json:"private"`
-	CreatedAt   string `json:"createdAt"`
+	Id          string  `json:"id"`
+	Name        string  `json:"name"`
+	FullName    string  `json:"fullName"`
+	Description *string `json:"description"`
+	Private     bool    `json:"private"`
+	CreatedAt   string  `json:"createdAt"`
 }
 
 // GetId returns CreateLedgerCreateLedger.Id, and is useful for accessing the field via an interface.
@@ -97,7 +123,7 @@ func (v *CreateLedgerCreateLedger) GetName() string { return v.Name }
 func (v *CreateLedgerCreateLedger) GetFullName() string { return v.FullName }
 
 // GetDescription returns CreateLedgerCreateLedger.Description, and is useful for accessing the field via an interface.
-func (v *CreateLedgerCreateLedger) GetDescription() string { return v.Description }
+func (v *CreateLedgerCreateLedger) GetDescription() *string { return v.Description }
 
 // GetPrivate returns CreateLedgerCreateLedger.Private, and is useful for accessing the field via an interface.
 func (v *CreateLedgerCreateLedger) GetPrivate() bool { return v.Private }
@@ -153,20 +179,20 @@ func (v *GetCliAuthSessionResponse) GetGetCliAuthSession() GetCliAuthSessionGetC
 
 // GetCurrentUserResponse is returned by GetCurrentUser on success.
 type GetCurrentUserResponse struct {
-	UserProfile GetCurrentUserUserProfileUserProfileResponse `json:"userProfile"`
+	UserProfile *GetCurrentUserUserProfileUserProfileResponse `json:"userProfile"`
 }
 
 // GetUserProfile returns GetCurrentUserResponse.UserProfile, and is useful for accessing the field via an interface.
-func (v *GetCurrentUserResponse) GetUserProfile() GetCurrentUserUserProfileUserProfileResponse {
+func (v *GetCurrentUserResponse) GetUserProfile() *GetCurrentUserUserProfileUserProfileResponse {
 	return v.UserProfile
 }
 
 // GetCurrentUserUserProfileUserProfileResponse includes the requested fields of the GraphQL type UserProfileResponse.
 type GetCurrentUserUserProfileUserProfileResponse struct {
-	Id       string `json:"id"`
-	Email    string `json:"email"`
-	Username string `json:"username"`
-	Tier     string `json:"tier"`
+	Id       string  `json:"id"`
+	Email    string  `json:"email"`
+	Username *string `json:"username"`
+	Tier     string  `json:"tier"`
 }
 
 // GetId returns GetCurrentUserUserProfileUserProfileResponse.Id, and is useful for accessing the field via an interface.
@@ -176,20 +202,81 @@ func (v *GetCurrentUserUserProfileUserProfileResponse) GetId() string { return v
 func (v *GetCurrentUserUserProfileUserProfileResponse) GetEmail() string { return v.Email }
 
 // GetUsername returns GetCurrentUserUserProfileUserProfileResponse.Username, and is useful for accessing the field via an interface.
-func (v *GetCurrentUserUserProfileUserProfileResponse) GetUsername() string { return v.Username }
+func (v *GetCurrentUserUserProfileUserProfileResponse) GetUsername() *string { return v.Username }
 
 // GetTier returns GetCurrentUserUserProfileUserProfileResponse.Tier, and is useful for accessing the field via an interface.
 func (v *GetCurrentUserUserProfileUserProfileResponse) GetTier() string { return v.Tier }
 
+type LedgerAmountInput struct {
+	Number   string `json:"number"`
+	Currency string `json:"currency"`
+}
+
+// GetNumber returns LedgerAmountInput.Number, and is useful for accessing the field via an interface.
+func (v *LedgerAmountInput) GetNumber() string { return v.Number }
+
+// GetCurrency returns LedgerAmountInput.Currency, and is useful for accessing the field via an interface.
+func (v *LedgerAmountInput) GetCurrency() string { return v.Currency }
+
+type LedgerPostingInput struct {
+	Units   LedgerAmountInput  `json:"units"`
+	Account string             `json:"account"`
+	Price   *LedgerAmountInput `json:"price"`
+	Flag    *string            `json:"flag"`
+}
+
+// GetUnits returns LedgerPostingInput.Units, and is useful for accessing the field via an interface.
+func (v *LedgerPostingInput) GetUnits() LedgerAmountInput { return v.Units }
+
+// GetAccount returns LedgerPostingInput.Account, and is useful for accessing the field via an interface.
+func (v *LedgerPostingInput) GetAccount() string { return v.Account }
+
+// GetPrice returns LedgerPostingInput.Price, and is useful for accessing the field via an interface.
+func (v *LedgerPostingInput) GetPrice() *LedgerAmountInput { return v.Price }
+
+// GetFlag returns LedgerPostingInput.Flag, and is useful for accessing the field via an interface.
+func (v *LedgerPostingInput) GetFlag() *string { return v.Flag }
+
+type LedgerTransactionInput struct {
+	Date      string               `json:"date"`
+	Flag      string               `json:"flag"`
+	Payee     *string              `json:"payee"`
+	Narration *string              `json:"narration"`
+	Postings  []LedgerPostingInput `json:"postings"`
+	Tags      []string             `json:"tags"`
+	Links     []string             `json:"links"`
+}
+
+// GetDate returns LedgerTransactionInput.Date, and is useful for accessing the field via an interface.
+func (v *LedgerTransactionInput) GetDate() string { return v.Date }
+
+// GetFlag returns LedgerTransactionInput.Flag, and is useful for accessing the field via an interface.
+func (v *LedgerTransactionInput) GetFlag() string { return v.Flag }
+
+// GetPayee returns LedgerTransactionInput.Payee, and is useful for accessing the field via an interface.
+func (v *LedgerTransactionInput) GetPayee() *string { return v.Payee }
+
+// GetNarration returns LedgerTransactionInput.Narration, and is useful for accessing the field via an interface.
+func (v *LedgerTransactionInput) GetNarration() *string { return v.Narration }
+
+// GetPostings returns LedgerTransactionInput.Postings, and is useful for accessing the field via an interface.
+func (v *LedgerTransactionInput) GetPostings() []LedgerPostingInput { return v.Postings }
+
+// GetTags returns LedgerTransactionInput.Tags, and is useful for accessing the field via an interface.
+func (v *LedgerTransactionInput) GetTags() []string { return v.Tags }
+
+// GetLinks returns LedgerTransactionInput.Links, and is useful for accessing the field via an interface.
+func (v *LedgerTransactionInput) GetLinks() []string { return v.Links }
+
 // ListUserOwnedLedgersListUserOwnedLedgersLedger includes the requested fields of the GraphQL type Ledger.
 type ListUserOwnedLedgersListUserOwnedLedgersLedger struct {
-	Id          string `json:"id"`
-	Name        string `json:"name"`
-	FullName    string `json:"fullName"`
-	Description string `json:"description"`
-	Private     bool   `json:"private"`
-	CreatedAt   string `json:"createdAt"`
-	UpdatedAt   string `json:"updatedAt"`
+	Id          string  `json:"id"`
+	Name        string  `json:"name"`
+	FullName    string  `json:"fullName"`
+	Description *string `json:"description"`
+	Private     bool    `json:"private"`
+	CreatedAt   string  `json:"createdAt"`
+	UpdatedAt   string  `json:"updatedAt"`
 }
 
 // GetId returns ListUserOwnedLedgersListUserOwnedLedgersLedger.Id, and is useful for accessing the field via an interface.
@@ -202,7 +289,7 @@ func (v *ListUserOwnedLedgersListUserOwnedLedgersLedger) GetName() string { retu
 func (v *ListUserOwnedLedgersListUserOwnedLedgersLedger) GetFullName() string { return v.FullName }
 
 // GetDescription returns ListUserOwnedLedgersListUserOwnedLedgersLedger.Description, and is useful for accessing the field via an interface.
-func (v *ListUserOwnedLedgersListUserOwnedLedgersLedger) GetDescription() string {
+func (v *ListUserOwnedLedgersListUserOwnedLedgersLedger) GetDescription() *string {
 	return v.Description
 }
 
@@ -241,6 +328,18 @@ type LogoutResponse struct {
 // GetLogout returns LogoutResponse.Logout, and is useful for accessing the field via an interface.
 func (v *LogoutResponse) GetLogout() LogoutLogoutLogoutResponse { return v.Logout }
 
+// __AddEntryTransactionInput is used internally by genqlient
+type __AddEntryTransactionInput struct {
+	LedgerId    string                 `json:"ledgerId"`
+	Transaction LedgerTransactionInput `json:"transaction"`
+}
+
+// GetLedgerId returns __AddEntryTransactionInput.LedgerId, and is useful for accessing the field via an interface.
+func (v *__AddEntryTransactionInput) GetLedgerId() string { return v.LedgerId }
+
+// GetTransaction returns __AddEntryTransactionInput.Transaction, and is useful for accessing the field via an interface.
+func (v *__AddEntryTransactionInput) GetTransaction() LedgerTransactionInput { return v.Transaction }
+
 // __ConsumeCliAuthSessionInput is used internally by genqlient
 type __ConsumeCliAuthSessionInput struct {
 	SessionId string `json:"sessionId"`
@@ -251,15 +350,15 @@ func (v *__ConsumeCliAuthSessionInput) GetSessionId() string { return v.SessionI
 
 // __CreateLedgerInput is used internally by genqlient
 type __CreateLedgerInput struct {
-	Name        string `json:"name"`
-	Description string `json:"description"`
+	Name        string  `json:"name"`
+	Description *string `json:"description"`
 }
 
 // GetName returns __CreateLedgerInput.Name, and is useful for accessing the field via an interface.
 func (v *__CreateLedgerInput) GetName() string { return v.Name }
 
 // GetDescription returns __CreateLedgerInput.Description, and is useful for accessing the field via an interface.
-func (v *__CreateLedgerInput) GetDescription() string { return v.Description }
+func (v *__CreateLedgerInput) GetDescription() *string { return v.Description }
 
 // __DeleteLedgerInput is used internally by genqlient
 type __DeleteLedgerInput struct {
@@ -276,6 +375,43 @@ type __GetCliAuthSessionInput struct {
 
 // GetSessionId returns __GetCliAuthSessionInput.SessionId, and is useful for accessing the field via an interface.
 func (v *__GetCliAuthSessionInput) GetSessionId() string { return v.SessionId }
+
+// The mutation executed by AddEntryTransaction.
+const AddEntryTransaction_Operation = `
+mutation AddEntryTransaction ($ledgerId: String!, $transaction: LedgerTransactionInput!) {
+	addEntryTransaction(ledgerId: $ledgerId, transaction: $transaction) {
+		success
+		message
+	}
+}
+`
+
+func AddEntryTransaction(
+	ctx_ context.Context,
+	client_ graphql.Client,
+	ledgerId string,
+	transaction LedgerTransactionInput,
+) (data_ *AddEntryTransactionResponse, err_ error) {
+	req_ := &graphql.Request{
+		OpName: "AddEntryTransaction",
+		Query:  AddEntryTransaction_Operation,
+		Variables: &__AddEntryTransactionInput{
+			LedgerId:    ledgerId,
+			Transaction: transaction,
+		},
+	}
+
+	data_ = &AddEntryTransactionResponse{}
+	resp_ := &graphql.Response{Data: data_}
+
+	err_ = client_.MakeRequest(
+		ctx_,
+		req_,
+		resp_,
+	)
+
+	return data_, err_
+}
 
 // The mutation executed by ConsumeCliAuthSession.
 const ConsumeCliAuthSession_Operation = `
@@ -361,7 +497,7 @@ func CreateLedger(
 	ctx_ context.Context,
 	client_ graphql.Client,
 	name string,
-	description string,
+	description *string,
 ) (data_ *CreateLedgerResponse, err_ error) {
 	req_ := &graphql.Request{
 		OpName: "CreateLedger",
