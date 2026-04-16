@@ -130,6 +130,7 @@ const (
 	CliAuthStatusAuthorized CliAuthStatus = "AUTHORIZED"
 	CliAuthStatusDenied     CliAuthStatus = "DENIED"
 	CliAuthStatusExpired    CliAuthStatus = "EXPIRED"
+	CliAuthStatusConsumed   CliAuthStatus = "CONSUMED"
 )
 
 var AllCliAuthStatus = []CliAuthStatus{
@@ -137,6 +138,7 @@ var AllCliAuthStatus = []CliAuthStatus{
 	CliAuthStatusAuthorized,
 	CliAuthStatusDenied,
 	CliAuthStatusExpired,
+	CliAuthStatusConsumed,
 }
 
 // ConsumeCliAuthSessionConsumeCliAuthSessionConsumeCliAuthSessionResponse includes the requested fields of the GraphQL type ConsumeCliAuthSessionResponse.
@@ -245,23 +247,23 @@ func (v *DeleteLedgerResponse) GetDeleteLedger() DeleteLedgerDeleteLedgerDeleteL
 	return v.DeleteLedger
 }
 
-// GetCliAuthSessionGetCliAuthSessionPollCliAuthSessionResponse includes the requested fields of the GraphQL type PollCliAuthSessionResponse.
-type GetCliAuthSessionGetCliAuthSessionPollCliAuthSessionResponse struct {
+// GetCliAuthSessionGetCliAuthSessionGetCliAuthSessionResponse includes the requested fields of the GraphQL type GetCliAuthSessionResponse.
+type GetCliAuthSessionGetCliAuthSessionGetCliAuthSessionResponse struct {
 	Status CliAuthStatus `json:"status"`
 }
 
-// GetStatus returns GetCliAuthSessionGetCliAuthSessionPollCliAuthSessionResponse.Status, and is useful for accessing the field via an interface.
-func (v *GetCliAuthSessionGetCliAuthSessionPollCliAuthSessionResponse) GetStatus() CliAuthStatus {
+// GetStatus returns GetCliAuthSessionGetCliAuthSessionGetCliAuthSessionResponse.Status, and is useful for accessing the field via an interface.
+func (v *GetCliAuthSessionGetCliAuthSessionGetCliAuthSessionResponse) GetStatus() CliAuthStatus {
 	return v.Status
 }
 
 // GetCliAuthSessionResponse is returned by GetCliAuthSession on success.
 type GetCliAuthSessionResponse struct {
-	GetCliAuthSession GetCliAuthSessionGetCliAuthSessionPollCliAuthSessionResponse `json:"getCliAuthSession"`
+	GetCliAuthSession GetCliAuthSessionGetCliAuthSessionGetCliAuthSessionResponse `json:"getCliAuthSession"`
 }
 
 // GetGetCliAuthSession returns GetCliAuthSessionResponse.GetCliAuthSession, and is useful for accessing the field via an interface.
-func (v *GetCliAuthSessionResponse) GetGetCliAuthSession() GetCliAuthSessionGetCliAuthSessionPollCliAuthSessionResponse {
+func (v *GetCliAuthSessionResponse) GetGetCliAuthSession() GetCliAuthSessionGetCliAuthSessionGetCliAuthSessionResponse {
 	return v.GetCliAuthSession
 }
 

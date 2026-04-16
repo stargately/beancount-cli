@@ -21,6 +21,7 @@ enum CliAuthStatus {
   AUTHORIZED
   DENIED
   EXPIRED
+  CONSUMED
 }
 
 """
@@ -149,6 +150,12 @@ input LedgerDocumentInput {
   links: [String!]
 }
 
+input LedgerEventInput {
+  date: String!
+  type: String!
+  description: String!
+}
+
 input InsertReceiptTransactionInput {
   date: String!
   payee: String!
@@ -249,13 +256,8 @@ type ValidateEmailTokenResponse {
   isValid: Boolean!
 }
 
-type PollCliAuthSessionResponse {
+type GetCliAuthSessionResponse {
   status: CliAuthStatus!
-}
-
-type ConsumeCliAuthSessionResponse {
-  token: String!
-  expireAt: String!
 }
 
 type Ledger {
@@ -992,6 +994,19 @@ type CreateCliAuthSessionResponse {
   expiresAt: String!
 }
 
+type ConfirmCliAuthSessionResponse {
+  success: Boolean!
+}
+
+type DenyCliAuthSessionResponse {
+  success: Boolean!
+}
+
+type ConsumeCliAuthSessionResponse {
+  token: String!
+  expireAt: String!
+}
+
 type DeleteLedgerResponse {
   ledgerId: String!
 }
@@ -1155,19 +1170,19 @@ type Query {
   aiCfoUsage: AiCfoUsageResponse!
   getUserByExactMatch(keyword: String!, includeCurrentUser: String): [SearchUser!]!
   validateEmailToken(token: String!): ValidateEmailTokenResponse!
-  getCliAuthSession(sessionId: String!): PollCliAuthSessionResponse!
+  getCliAuthSession(sessionId: String!): GetCliAuthSessionResponse!
   listLedgers(page: Float, limit: Float): [Ledger!]!
   listUserOwnedLedgers(page: Float, limit: Float): [Ledger!]!
   searchLedgers(q: String, topic: Boolean, includeDesc: Boolean, uid: Float, priorityOwnerId: Float, teamId: Float, starredBy: Float, private: Boolean, isPrivate: Boolean, template: Boolean, archived: Boolean, mode: String, exclusive: Boolean, sort: String, order: String, page: Float, limit: Float): [Ledger!]!
   getLedger(ledgerId: String!): Ledger!
   getLedgerFile(path: String!, ledgerId: String!): LedgerFileContent
   getLedgerDirContent(dirPath: String, ledgerId: String!): [LedgerFileContent!]!
-  getLedgerOverview(account: String, filter: String, time: String, conversion: String!, interval: String!, ledgerId: String!): LedgerOverview!
+  getLedgerOverview(account: String, filter: String, time: String, conversion: String! = "USD", interval: String! = "monthly", ledgerId: String!): LedgerOverview!
   getLedgerAttributes(ledgerId: String!): LedgerAttributes!
   getLedgerCommodities(ledgerId: String!): [CommodityPairWithPrices!]!
-  getLedgerIncomeStatement(account: String, filter: String, time: String, conversion: String!, interval: String!, ledgerId: String!): IncomeStatementData!
-  getLedgerBalanceSheet(account: String, filter: String, time: String, conversion: String!, interval: String!, ledgerId: String!): BalanceSheetData!
-  getLedgerTrialBalance(account: String, filter: String, time: String, conversion: String!, interval: String!, ledgerId: String!): TrialBalanceData!
+  getLedgerIncomeStatement(account: String, filter: String, time: String, conversion: String! = "USD", interval: String! = "monthly", ledgerId: String!): IncomeStatementData!
+  getLedgerBalanceSheet(account: String, filter: String, time: String, conversion: String! = "USD", interval: String! = "monthly", ledgerId: String!): BalanceSheetData!
+  getLedgerTrialBalance(account: String, filter: String, time: String, conversion: String! = "USD", interval: String! = "monthly", ledgerId: String!): TrialBalanceData!
   getLedgerEvents(account: String, filter: String, time: String, ledgerId: String!): [Event!]!
   getLedgerDocuments(account: String, filter: String, time: String, ledgerId: String!): [Document!]!
   getLedgerPayeeTransactions(payee: String!, ledgerId: String!): Transaction!
@@ -1182,8 +1197,8 @@ type Query {
   getLedgerPayees(ledgerId: String!): [String!]!
   getLedgerAccountLastEntries(account: String, filter: String, time: String, ledgerId: String!): [AccountLastEntry!]!
   getLedgerEntriesCountPerType(account: String, filter: String, time: String, ledgerId: String!): [EntriesByType!]!
-  getLedgerAccountReport(account: String, filter: String, time: String, conversion: String!, interval: String!, accountName: String!, ledgerId: String!): AccountReport!
-  getLedgerIntervalTotals(account: String, filter: String, time: String, conversion: String!, interval: String!, accountName: String!, ledgerId: String!): [IntervalTotalItem!]!
+  getLedgerAccountReport(account: String, filter: String, time: String, conversion: String! = "USD", interval: String! = "monthly", accountName: String!, ledgerId: String!): AccountReport!
+  getLedgerIntervalTotals(account: String, filter: String, time: String, conversion: String! = "USD", interval: String! = "monthly", accountName: String!, ledgerId: String!): [IntervalTotalItem!]!
   health: String!
   subscriptionStatus: CustomerSubscriptionStatus!
   listPublicKeys(page: Float, limit: Float): [PublicKey!]!
@@ -1204,13 +1219,13 @@ type Query {
   homeCharts(userId: String!, ledgerId: String): HomeChartsResponse!
   journalEntries(first: Int, after: String, last: Int, before: String, detailed: Boolean, searchQuery: String, accountFilter: String, amountMin: Float, amountMax: Float, entryTypes: [String!], sortBy: String, sortOrder: String, groupBy: String): JournalEntriesResponse!
   featureFlags(userId: String!): JSONObject!
-  getFeed(offset: Float!, limit: Float!, source: String, locale: String): FeedResponse!
+  getFeed(offset: Float! = 0, limit: Float! = 10, source: String, locale: String): FeedResponse!
   getUserProfile(username: String!): PublicUserProfileResponse!
-  getUserFollowers(username: String!, page: Float, limit: Float): UserListResponse!
-  getUserFollowing(username: String!, page: Float, limit: Float): UserListResponse!
-  getUserStarredRepos(username: String!, page: Float, limit: Float): RepositoryListResponse!
+  getUserFollowers(username: String!, page: Float = 1, limit: Float = 20): UserListResponse!
+  getUserFollowing(username: String!, page: Float = 1, limit: Float = 20): UserListResponse!
+  getUserStarredRepos(username: String!, page: Float = 1, limit: Float = 20): RepositoryListResponse!
   getPullRequestDetails(prNumber: Int!, ledgerName: String!, ledgerOwner: String!): PullRequestDetails!
-  listCommits(limit: Int!, page: Int!, branch: String!, ledgerName: String!, ledgerOwner: String!): [CommitListItem!]!
+  listCommits(limit: Int! = 30, page: Int! = 1, branch: String! = "main", ledgerName: String!, ledgerOwner: String!): [CommitListItem!]!
   getCommitDetails(sha: String!, ledgerName: String!, ledgerOwner: String!): CommitDetails!
   suggestTransactionCategoriesWithLLM(transactions: [TransactionToCategorizeInput!]!, ledgerId: String!): [CategorySuggestion!]!
   getPlaidItems: [PlaidItemType!]!
@@ -1235,8 +1250,8 @@ type Mutation {
   preSignUp(email: String!, password: String!, firstName: String!, lastName: String!, username: String, inviteSrc: String, inviteBy: String, withDefaultLedger: Boolean): PreSignUpResponse!
   finishSignUp(sessionId: String!, otp: String!): TokenAuthResponse!
   createCliAuthSession: CreateCliAuthSessionResponse!
-  confirmCliAuthSession(sessionId: String!): Boolean!
-  denyCliAuthSession(sessionId: String!): Boolean!
+  confirmCliAuthSession(sessionId: String!): ConfirmCliAuthSessionResponse!
+  denyCliAuthSession(sessionId: String!): DenyCliAuthSessionResponse!
   consumeCliAuthSession(sessionId: String!): ConsumeCliAuthSessionResponse!
   createLedger(name: String!, description: String, private: Boolean): Ledger!
   updateLedger(name: String, description: String, private: Boolean, ledgerId: String!): Ledger!
@@ -1251,7 +1266,7 @@ type Mutation {
   createStripePortalSession(clientId: String!): SubscriptionSessionResult!
   cancelSubscription(clientId: String!, subscriptionId: String!): SubscriptionActionResult!
   upgradeSubscription(priceId: String!, clientId: String!): UpgradeSubscriptionResult!
-  createPublicKey(key: String!, title: String!, readOnly: Boolean): PublicKey!
+  createPublicKey(key: String!, title: String!, readOnly: Boolean = false): PublicKey!
   deletePublicKey(keyId: Float!): DeletePublicKeyResponse!
   addOrUpdateLedgerCollaborator(ledgerId: String!, collaborator: String!, permission: String): AddCollaboratorResponse!
   deleteLedgerCollaborator(ledgerId: String!, collaborator: String!): DeleteCollaboratorResponse!
@@ -1266,6 +1281,7 @@ type Mutation {
   addEntryClose(close: LedgerCloseInput!, ledgerId: String!): AddLedgerEntryResponse!
   addEntryBudget(budget: LedgerBudgetInput!, ledgerId: String!): AddLedgerEntryResponse!
   addEntryDocument(document: LedgerDocumentInput!, ledgerId: String!): AddLedgerEntryResponse!
+  addEntryEvent(event: LedgerEventInput!, ledgerId: String!): AddLedgerEntryResponse!
   insertReceiptTransaction(input: InsertReceiptTransactionInput!, receiptObjectKey: String!, ledgerId: String!): InsertReceiptResult!
   deleteLedgerEntrySourceSlice(input: DeleteSourceSliceInput!, ledgerId: String!): DeleteSourceSliceResponse!
   deleteMultipleLedgerEntrySourceSlices(input: DeleteMultiSourceSlicesInput!, ledgerId: String!): DeleteMultiSourceSlicesResponse!
@@ -1291,3 +1307,4 @@ type Mutation {
   sendPushNotification(pushToken: String!, message: String!, data: JSONObject!): Boolean!
   updateReportSubscribe(userId: String!, status: ReportStatus!): UpdateReportSubscribeResponse
 }
+
