@@ -96,3 +96,10 @@ mutation AddEntryNote($ledgerId: String!, $note: LedgerNoteInput!) {
     message
   }
 }
+
+mutation AddEntryEvent($ledgerId: String!, $event: LedgerEventInput!) {
+  addEntryEvent(ledgerId: $ledgerId, event: $event) {
+    success
+    message
+  }
+}

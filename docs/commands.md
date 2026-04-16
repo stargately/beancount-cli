@@ -15,6 +15,7 @@
 | `transaction add`          | Add a transaction to a ledger                        |
 | `balance add`              | Add a balance assertion directive to a ledger        |
 | `note add`                 | Add a note directive to a ledger                     |
+| `event add`                | Add an event directive to a ledger                   |
 
 ## account open
 
@@ -236,6 +237,48 @@ beancount-cli note add \
   --ledger user/mybook \
   --account Expenses:Medical \
   --content "Insurance reimbursement pending"
+```
+
+## event add
+
+Add an event directive to a ledger. Events record a named value that changes over time (e.g. current location, employer, status).
+
+```sh
+beancount-cli event add \
+  --ledger user/mybook \
+  --type "location" \
+  --description "New York" \
+  --date 2024-01-01
+```
+
+### Flags
+
+| Flag | Required | Default | Description |
+|------|----------|---------|-------------|
+| `--ledger` | yes | — | Ledger full name (find with `ledger list`) |
+| `--type` | yes | — | Event type (e.g. `location`, `employer`) |
+| `--description` | yes | — | Value for this event |
+| `--date` | no | today | Event date, `YYYY-MM-DD` |
+
+### Examples
+
+**Record a change of location:**
+
+```sh
+beancount-cli event add \
+  --ledger user/mybook \
+  --type "location" \
+  --description "San Francisco" \
+  --date 2024-03-01
+```
+
+**Record an event today (date omitted):**
+
+```sh
+beancount-cli event add \
+  --ledger user/mybook \
+  --type "employer" \
+  --description "Acme Corp"
 ```
 
 ## ledger create

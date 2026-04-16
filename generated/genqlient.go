@@ -52,6 +52,28 @@ func (v *AddEntryCloseResponse) GetAddEntryClose() AddEntryCloseAddEntryCloseAdd
 	return v.AddEntryClose
 }
 
+// AddEntryEventAddEntryEventAddLedgerEntryResponse includes the requested fields of the GraphQL type AddLedgerEntryResponse.
+type AddEntryEventAddEntryEventAddLedgerEntryResponse struct {
+	Success bool    `json:"success"`
+	Message *string `json:"message"`
+}
+
+// GetSuccess returns AddEntryEventAddEntryEventAddLedgerEntryResponse.Success, and is useful for accessing the field via an interface.
+func (v *AddEntryEventAddEntryEventAddLedgerEntryResponse) GetSuccess() bool { return v.Success }
+
+// GetMessage returns AddEntryEventAddEntryEventAddLedgerEntryResponse.Message, and is useful for accessing the field via an interface.
+func (v *AddEntryEventAddEntryEventAddLedgerEntryResponse) GetMessage() *string { return v.Message }
+
+// AddEntryEventResponse is returned by AddEntryEvent on success.
+type AddEntryEventResponse struct {
+	AddEntryEvent AddEntryEventAddEntryEventAddLedgerEntryResponse `json:"addEntryEvent"`
+}
+
+// GetAddEntryEvent returns AddEntryEventResponse.AddEntryEvent, and is useful for accessing the field via an interface.
+func (v *AddEntryEventResponse) GetAddEntryEvent() AddEntryEventAddEntryEventAddLedgerEntryResponse {
+	return v.AddEntryEvent
+}
+
 // AddEntryNoteAddEntryNoteAddLedgerEntryResponse includes the requested fields of the GraphQL type AddLedgerEntryResponse.
 type AddEntryNoteAddEntryNoteAddLedgerEntryResponse struct {
 	Success bool    `json:"success"`
@@ -334,6 +356,21 @@ func (v *LedgerCloseInput) GetDate() string { return v.Date }
 // GetAccount returns LedgerCloseInput.Account, and is useful for accessing the field via an interface.
 func (v *LedgerCloseInput) GetAccount() string { return v.Account }
 
+type LedgerEventInput struct {
+	Date        string `json:"date"`
+	Type        string `json:"type"`
+	Description string `json:"description"`
+}
+
+// GetDate returns LedgerEventInput.Date, and is useful for accessing the field via an interface.
+func (v *LedgerEventInput) GetDate() string { return v.Date }
+
+// GetType returns LedgerEventInput.Type, and is useful for accessing the field via an interface.
+func (v *LedgerEventInput) GetType() string { return v.Type }
+
+// GetDescription returns LedgerEventInput.Description, and is useful for accessing the field via an interface.
+func (v *LedgerEventInput) GetDescription() string { return v.Description }
+
 type LedgerNoteInput struct {
 	Date    string `json:"date"`
 	Content string `json:"content"`
@@ -498,6 +535,18 @@ func (v *__AddEntryCloseInput) GetLedgerId() string { return v.LedgerId }
 // GetClose returns __AddEntryCloseInput.Close, and is useful for accessing the field via an interface.
 func (v *__AddEntryCloseInput) GetClose() LedgerCloseInput { return v.Close }
 
+// __AddEntryEventInput is used internally by genqlient
+type __AddEntryEventInput struct {
+	LedgerId string           `json:"ledgerId"`
+	Event    LedgerEventInput `json:"event"`
+}
+
+// GetLedgerId returns __AddEntryEventInput.LedgerId, and is useful for accessing the field via an interface.
+func (v *__AddEntryEventInput) GetLedgerId() string { return v.LedgerId }
+
+// GetEvent returns __AddEntryEventInput.Event, and is useful for accessing the field via an interface.
+func (v *__AddEntryEventInput) GetEvent() LedgerEventInput { return v.Event }
+
 // __AddEntryNoteInput is used internally by genqlient
 type __AddEntryNoteInput struct {
 	LedgerId string          `json:"ledgerId"`
@@ -633,6 +682,43 @@ func AddEntryClose(
 	}
 
 	data_ = &AddEntryCloseResponse{}
+	resp_ := &graphql.Response{Data: data_}
+
+	err_ = client_.MakeRequest(
+		ctx_,
+		req_,
+		resp_,
+	)
+
+	return data_, err_
+}
+
+// The mutation executed by AddEntryEvent.
+const AddEntryEvent_Operation = `
+mutation AddEntryEvent ($ledgerId: String!, $event: LedgerEventInput!) {
+	addEntryEvent(ledgerId: $ledgerId, event: $event) {
+		success
+		message
+	}
+}
+`
+
+func AddEntryEvent(
+	ctx_ context.Context,
+	client_ graphql.Client,
+	ledgerId string,
+	event LedgerEventInput,
+) (data_ *AddEntryEventResponse, err_ error) {
+	req_ := &graphql.Request{
+		OpName: "AddEntryEvent",
+		Query:  AddEntryEvent_Operation,
+		Variables: &__AddEntryEventInput{
+			LedgerId: ledgerId,
+			Event:    event,
+		},
+	}
+
+	data_ = &AddEntryEventResponse{}
 	resp_ := &graphql.Response{Data: data_}
 
 	err_ = client_.MakeRequest(
