@@ -82,3 +82,17 @@ mutation AddEntryClose($ledgerId: String!, $close: LedgerCloseInput!) {
     message
   }
 }
+
+mutation AddEntryBalance($ledgerId: String!, $balance: LedgerBalanceInput!) {
+  addEntryBalance(ledgerId: $ledgerId, balance: $balance) {
+    success
+    message
+  }
+}
+
+mutation AddEntryNote($ledgerId: String!, $note: LedgerNoteInput!) {
+  addEntryNote(ledgerId: $ledgerId, note: $note) {
+    success
+    message
+  }
+}
