@@ -14,19 +14,19 @@ import (
 var queryFormat string
 
 var queryCmd = &cobra.Command{
-	Use:   "query <file> [query]",
+	Use:   "bean-query <file> [query]",
 	Short: "Query a Beancount ledger using BQL",
-	Long: `Query runs bean-query against a Beancount ledger file.
+	Long: `bean-query runs bean-query against a Beancount ledger file.
 
 With a query argument, bean-query runs in batch mode and prints results to stdout:
-  beancount-cli query ledger.beancount "SELECT account, sum(position)"
+  beancount-cli bean-query ledger.beancount "SELECT account, sum(position)"
 
 Without a query argument, bean-query opens its interactive shell where you can
 type BQL statements at the prompt:
-  beancount-cli query ledger.beancount
+  beancount-cli bean-query ledger.beancount
 
 Output format can be changed with --format:
-  beancount-cli query --format csv ledger.beancount "BALANCES"`,
+  beancount-cli bean-query --format csv ledger.beancount "BALANCES"`,
 	Args: cobra.RangeArgs(1, 2),
 	RunE: runQuery,
 }
