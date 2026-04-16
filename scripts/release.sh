@@ -1,7 +1,16 @@
 #!/bin/sh
 set -e
 
-printf "Version to release (e.g. 0.2.0): "
+LATEST_VERSION=""
+if command -v gh >/dev/null 2>&1; then
+  LATEST_VERSION="$(gh release list --limit 1 --json tagName --jq '.[0].tagName' 2>/dev/null || true)"
+fi
+
+if [ -n "$LATEST_VERSION" ]; then
+  printf "Version to release (current: %s, e.g. 0.2.0): " "${LATEST_VERSION#v}"
+else
+  printf "Version to release (e.g. 0.2.0): "
+fi
 read -r VERSION
 
 # Strip a leading 'v' if the user included one
