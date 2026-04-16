@@ -12,9 +12,9 @@ import (
 )
 
 var checkCmd = &cobra.Command{
-	Use:   "check <file>",
+	Use:   "bean-check <file>",
 	Short: "Check a Beancount ledger file for errors",
-	Long: `Check parses and validates a Beancount ledger file using bean-check.
+	Long: `bean-check parses and validates a Beancount ledger file using bean-check.
 
 Detected errors are printed to stderr in Emacs-compatible format:
   filename:line: Error: description

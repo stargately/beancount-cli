@@ -262,18 +262,18 @@ Delete a ledger permanently by its full name. Find the full name with `ledger li
 beancount-cli ledger delete user/my-budget
 ```
 
-## check
+## bean-check
 
 Validate a local `.beancount` file using `bean-check`.
 
 ```sh
-beancount-cli check path/to/ledger.beancount
+beancount-cli bean-check path/to/ledger.beancount
 ```
 
-## query
+## bean-query
 
 Run a BQL query against a local `.beancount` file using `bean-query`.
 
 ```sh
-beancount-cli query path/to/ledger.beancount "SELECT account, sum(position) GROUP BY account"
+beancount-cli bean-query path/to/ledger.beancount "SELECT account, sum(position) GROUP BY account"
 ```
