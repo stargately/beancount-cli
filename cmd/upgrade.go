@@ -9,22 +9,22 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var updateCheckOnly bool
+var upgradeCheckOnly bool
 
-var updateCmd = &cobra.Command{
-	Use:   "update",
+var upgradeCmd = &cobra.Command{
+	Use:   "upgrade",
 	Short: "Check for and apply updates to beancount-cli",
 	Long: `Check GitHub for the latest beancount-cli release and update the binary in-place.
 
 Use --check to only report the available version without applying the update.`,
-	Example: `  beancount-cli update
-  beancount-cli update --check`,
-	RunE: runUpdate,
+	Example: `  beancount-cli upgrade
+  beancount-cli upgrade --check`,
+	RunE: runUpgrade,
 }
 
 func init() {
-	rootCmd.AddCommand(updateCmd)
-	updateCmd.Flags().BoolVar(&updateCheckOnly, "check", false, "Only check for updates, do not apply")
+	rootCmd.AddCommand(upgradeCmd)
+	upgradeCmd.Flags().BoolVar(&upgradeCheckOnly, "check", false, "Only check for updates, do not apply")
 }
 
 type updateResult struct {
@@ -62,7 +62,7 @@ func checkUpdate(ctx context.Context, currentVersion, slug string) (updateResult
 	return result, updater, nil
 }
 
-func runUpdate(cmd *cobra.Command, _ []string) error {
+func runUpgrade(cmd *cobra.Command, _ []string) error {
 	result, updater, err := checkUpdate(cmd.Context(), rootCmd.Version, "stargately/beancount-cli")
 	if err != nil {
 		return err
@@ -77,7 +77,7 @@ func runUpdate(cmd *cobra.Command, _ []string) error {
 
 	fmt.Fprintf(cmd.OutOrStdout(), "Update available: %s → %s\n", result.currentVersion, result.latestVersion)
 
-	if updateCheckOnly {
+	if upgradeCheckOnly {
 		fmt.Fprintln(cmd.OutOrStdout(), "Run without --check to apply the update.")
 		return nil
 	}
