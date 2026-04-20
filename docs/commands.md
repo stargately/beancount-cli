@@ -16,6 +16,10 @@
 | `balance add`              | Add a balance assertion directive to a ledger        |
 | `note add`                 | Add a note directive to a ledger                     |
 | `event add`                | Add an event directive to a ledger                   |
+| `price add`                | Add a price directive to a ledger                    |
+| `commodity add`            | Add a commodity directive to a ledger                |
+| `budget add`               | Add a budget directive to a ledger                   |
+| `document add`             | Add a document directive to a ledger                 |
 
 ## account open
 
@@ -26,7 +30,7 @@ beancount-cli account open \
   --ledger user/mybook \
   --account Expenses:Food:Coffee \
   --date 2024-01-01 \
-  --currency USD
+  --currency USD,EUR
 ```
 
 ### Flags
@@ -36,7 +40,7 @@ beancount-cli account open \
 | `--ledger` | yes | — | Ledger full name (find with `ledger list`) |
 | `--account` | yes | — | Account name to open (e.g. `Expenses:Food`) |
 | `--date` | no | today | Open date, `YYYY-MM-DD` |
-| `--currency` | no | — | Allowed currency (repeatable, omit to allow any) |
+| `--currency` | no | — | Allowed currencies, comma-separated (e.g. `USD,EUR`); omit to allow any |
 
 ### Examples
 
@@ -56,8 +60,7 @@ beancount-cli account open \
   --ledger user/mybook \
   --account Assets:Brokerage \
   --date 2024-01-01 \
-  --currency USD \
-  --currency EUR
+  --currency USD,EUR
 ```
 
 ## account close
@@ -279,6 +282,177 @@ beancount-cli event add \
   --ledger user/mybook \
   --type "employer" \
   --description "Acme Corp"
+```
+
+## price add
+
+Add a price directive to a ledger. This records the market price of a commodity in another currency on a specific date.
+
+```sh
+beancount-cli price add \
+  --ledger user/mybook \
+  --currency BTC \
+  --amount 60000,USD \
+  --date 2024-01-01
+```
+
+### Flags
+
+| Flag | Required | Default | Description |
+|------|----------|---------|-------------|
+| `--ledger` | yes | — | Ledger full name (find with `ledger list`) |
+| `--currency` | yes | — | Commodity being priced (e.g. `BTC`, `AAPL`) |
+| `--amount` | yes | — | Price as `number,currency` (e.g. `60000,USD`) |
+| `--date` | no | today | Price date, `YYYY-MM-DD` |
+
+### Examples
+
+**Record the price of Bitcoin in USD:**
+
+```sh
+beancount-cli price add \
+  --ledger user/mybook \
+  --currency BTC \
+  --amount 60000,USD \
+  --date 2024-01-01
+```
+
+**Record a stock price today (date omitted):**
+
+```sh
+beancount-cli price add \
+  --ledger user/mybook \
+  --currency AAPL \
+  --amount 189.30,USD
+```
+
+## commodity add
+
+Add a commodity directive to a ledger. This declares a currency or commodity symbol so metadata can be attached to it.
+
+```sh
+beancount-cli commodity add \
+  --ledger user/mybook \
+  --currency AAPL \
+  --date 2010-01-01
+```
+
+### Flags
+
+| Flag | Required | Default | Description |
+|------|----------|---------|-------------|
+| `--ledger` | yes | — | Ledger full name (find with `ledger list`) |
+| `--currency` | yes | — | Commodity symbol to declare (e.g. `AAPL`, `BTC`) |
+| `--date` | no | today | Declaration date, `YYYY-MM-DD` |
+
+### Examples
+
+**Declare a stock commodity:**
+
+```sh
+beancount-cli commodity add \
+  --ledger user/mybook \
+  --currency AAPL \
+  --date 2010-01-01
+```
+
+**Declare a cryptocurrency today:**
+
+```sh
+beancount-cli commodity add \
+  --ledger user/mybook \
+  --currency ETH
+```
+
+## budget add
+
+Add a budget directive to a ledger. This sets a recurring spending target for an account at a given interval.
+
+```sh
+beancount-cli budget add \
+  --ledger user/mybook \
+  --account Expenses:Food \
+  --amount 500,USD \
+  --interval MONTHLY
+```
+
+### Flags
+
+| Flag | Required | Default | Description |
+|------|----------|---------|-------------|
+| `--ledger` | yes | — | Ledger full name (find with `ledger list`) |
+| `--account` | yes | — | Account to budget (e.g. `Expenses:Food`) |
+| `--amount` | yes | — | Budget amount as `number,currency` (e.g. `500,USD`) |
+| `--interval` | yes | — | Recurrence: `DAILY`, `WEEKLY`, `MONTHLY`, `QUARTERLY`, `YEARLY` |
+| `--date` | no | today | Budget start date, `YYYY-MM-DD` |
+
+### Examples
+
+**Set a monthly food budget:**
+
+```sh
+beancount-cli budget add \
+  --ledger user/mybook \
+  --account Expenses:Food \
+  --amount 500,USD \
+  --interval MONTHLY
+```
+
+**Set a yearly rent budget:**
+
+```sh
+beancount-cli budget add \
+  --ledger user/mybook \
+  --account Expenses:Rent \
+  --amount 18000,USD \
+  --interval YEARLY \
+  --date 2024-01-01
+```
+
+## document add
+
+Add a document directive to a ledger. This links a file (receipt, statement, invoice) to an account on a specific date.
+
+```sh
+beancount-cli document add \
+  --ledger user/mybook \
+  --account Assets:Bank \
+  --filename receipts/2024-01-01.pdf \
+  --date 2024-01-01
+```
+
+### Flags
+
+| Flag | Required | Default | Description |
+|------|----------|---------|-------------|
+| `--ledger` | yes | — | Ledger full name (find with `ledger list`) |
+| `--account` | yes | — | Account the document belongs to |
+| `--filename` | yes | — | File path or name of the document |
+| `--date` | no | today | Document date, `YYYY-MM-DD` |
+| `--tag` | no | — | Tag (repeatable) |
+| `--link` | no | — | Link (repeatable) |
+
+### Examples
+
+**Attach a bank statement:**
+
+```sh
+beancount-cli document add \
+  --ledger user/mybook \
+  --account Assets:Bank \
+  --filename statements/2024-03.pdf \
+  --date 2024-03-31
+```
+
+**Attach a receipt with tags:**
+
+```sh
+beancount-cli document add \
+  --ledger user/mybook \
+  --account Expenses:Medical \
+  --filename receipts/dental-2024.pdf \
+  --tag tax-deductible \
+  --tag medical
 ```
 
 ## ledger create

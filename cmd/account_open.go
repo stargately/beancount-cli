@@ -3,6 +3,7 @@ package cmd
 import (
 	"context"
 	"fmt"
+	"strings"
 	"time"
 
 	"github.com/spf13/cobra"
@@ -21,8 +22,7 @@ Example:
     --ledger user/mybook \
     --account Expenses:Food:Coffee \
     --date 2024-01-01 \
-    --currency USD \
-    --currency EUR`,
+    --currency USD,EUR`,
 	RunE: runAccountOpen,
 }
 
@@ -30,7 +30,7 @@ var (
 	openLedger     string
 	openAccount    string
 	openDate       string
-	openCurrencies []string
+	openCurrencies string
 )
 
 func init() {
@@ -38,27 +38,30 @@ func init() {
 	accountOpenCmd.Flags().StringVar(&openLedger, "ledger", "", "Ledger full name (e.g. user/mybook) (required)")
 	accountOpenCmd.Flags().StringVar(&openAccount, "account", "", "Account name to open (e.g. Expenses:Food) (required)")
 	accountOpenCmd.Flags().StringVar(&openDate, "date", "", "Open date in YYYY-MM-DD format (default: today)")
-	accountOpenCmd.Flags().StringArrayVar(&openCurrencies, "currency", nil, "Allowed currency (repeatable, optional)")
+	accountOpenCmd.Flags().StringVar(&openCurrencies, "currency", "", "Allowed currencies, comma-separated (e.g. USD,EUR)")
 	_ = accountOpenCmd.MarkFlagRequired("ledger")
 	_ = accountOpenCmd.MarkFlagRequired("account")
 }
 
 // buildOpenInput constructs a LedgerOpenInput from raw CLI values.
 // Pure function — no I/O, no network calls.
-func buildOpenInput(date, account string, currencies []string) (generated.LedgerOpenInput, error) {
+func buildOpenInput(date, account, currencies string) (generated.LedgerOpenInput, error) {
 	if account == "" {
 		return generated.LedgerOpenInput{}, fmt.Errorf("account is required")
 	}
 	if date == "" {
 		date = time.Now().Format("2006-01-02")
 	}
-	if currencies == nil {
-		currencies = []string{}
+	parsed := []string{}
+	for _, c := range strings.Split(currencies, ",") {
+		if c = strings.TrimSpace(c); c != "" {
+			parsed = append(parsed, c)
+		}
 	}
 	return generated.LedgerOpenInput{
 		Date:       date,
 		Account:    account,
-		Currencies: currencies,
+		Currencies: parsed,
 	}, nil
 }
 

@@ -30,6 +30,28 @@ func (v *AddEntryBalanceResponse) GetAddEntryBalance() AddEntryBalanceAddEntryBa
 	return v.AddEntryBalance
 }
 
+// AddEntryBudgetAddEntryBudgetAddLedgerEntryResponse includes the requested fields of the GraphQL type AddLedgerEntryResponse.
+type AddEntryBudgetAddEntryBudgetAddLedgerEntryResponse struct {
+	Success bool    `json:"success"`
+	Message *string `json:"message"`
+}
+
+// GetSuccess returns AddEntryBudgetAddEntryBudgetAddLedgerEntryResponse.Success, and is useful for accessing the field via an interface.
+func (v *AddEntryBudgetAddEntryBudgetAddLedgerEntryResponse) GetSuccess() bool { return v.Success }
+
+// GetMessage returns AddEntryBudgetAddEntryBudgetAddLedgerEntryResponse.Message, and is useful for accessing the field via an interface.
+func (v *AddEntryBudgetAddEntryBudgetAddLedgerEntryResponse) GetMessage() *string { return v.Message }
+
+// AddEntryBudgetResponse is returned by AddEntryBudget on success.
+type AddEntryBudgetResponse struct {
+	AddEntryBudget AddEntryBudgetAddEntryBudgetAddLedgerEntryResponse `json:"addEntryBudget"`
+}
+
+// GetAddEntryBudget returns AddEntryBudgetResponse.AddEntryBudget, and is useful for accessing the field via an interface.
+func (v *AddEntryBudgetResponse) GetAddEntryBudget() AddEntryBudgetAddEntryBudgetAddLedgerEntryResponse {
+	return v.AddEntryBudget
+}
+
 // AddEntryCloseAddEntryCloseAddLedgerEntryResponse includes the requested fields of the GraphQL type AddLedgerEntryResponse.
 type AddEntryCloseAddEntryCloseAddLedgerEntryResponse struct {
 	Success bool    `json:"success"`
@@ -50,6 +72,56 @@ type AddEntryCloseResponse struct {
 // GetAddEntryClose returns AddEntryCloseResponse.AddEntryClose, and is useful for accessing the field via an interface.
 func (v *AddEntryCloseResponse) GetAddEntryClose() AddEntryCloseAddEntryCloseAddLedgerEntryResponse {
 	return v.AddEntryClose
+}
+
+// AddEntryCommodityAddEntryCommodityAddLedgerEntryResponse includes the requested fields of the GraphQL type AddLedgerEntryResponse.
+type AddEntryCommodityAddEntryCommodityAddLedgerEntryResponse struct {
+	Success bool    `json:"success"`
+	Message *string `json:"message"`
+}
+
+// GetSuccess returns AddEntryCommodityAddEntryCommodityAddLedgerEntryResponse.Success, and is useful for accessing the field via an interface.
+func (v *AddEntryCommodityAddEntryCommodityAddLedgerEntryResponse) GetSuccess() bool {
+	return v.Success
+}
+
+// GetMessage returns AddEntryCommodityAddEntryCommodityAddLedgerEntryResponse.Message, and is useful for accessing the field via an interface.
+func (v *AddEntryCommodityAddEntryCommodityAddLedgerEntryResponse) GetMessage() *string {
+	return v.Message
+}
+
+// AddEntryCommodityResponse is returned by AddEntryCommodity on success.
+type AddEntryCommodityResponse struct {
+	AddEntryCommodity AddEntryCommodityAddEntryCommodityAddLedgerEntryResponse `json:"addEntryCommodity"`
+}
+
+// GetAddEntryCommodity returns AddEntryCommodityResponse.AddEntryCommodity, and is useful for accessing the field via an interface.
+func (v *AddEntryCommodityResponse) GetAddEntryCommodity() AddEntryCommodityAddEntryCommodityAddLedgerEntryResponse {
+	return v.AddEntryCommodity
+}
+
+// AddEntryDocumentAddEntryDocumentAddLedgerEntryResponse includes the requested fields of the GraphQL type AddLedgerEntryResponse.
+type AddEntryDocumentAddEntryDocumentAddLedgerEntryResponse struct {
+	Success bool    `json:"success"`
+	Message *string `json:"message"`
+}
+
+// GetSuccess returns AddEntryDocumentAddEntryDocumentAddLedgerEntryResponse.Success, and is useful for accessing the field via an interface.
+func (v *AddEntryDocumentAddEntryDocumentAddLedgerEntryResponse) GetSuccess() bool { return v.Success }
+
+// GetMessage returns AddEntryDocumentAddEntryDocumentAddLedgerEntryResponse.Message, and is useful for accessing the field via an interface.
+func (v *AddEntryDocumentAddEntryDocumentAddLedgerEntryResponse) GetMessage() *string {
+	return v.Message
+}
+
+// AddEntryDocumentResponse is returned by AddEntryDocument on success.
+type AddEntryDocumentResponse struct {
+	AddEntryDocument AddEntryDocumentAddEntryDocumentAddLedgerEntryResponse `json:"addEntryDocument"`
+}
+
+// GetAddEntryDocument returns AddEntryDocumentResponse.AddEntryDocument, and is useful for accessing the field via an interface.
+func (v *AddEntryDocumentResponse) GetAddEntryDocument() AddEntryDocumentAddEntryDocumentAddLedgerEntryResponse {
+	return v.AddEntryDocument
 }
 
 // AddEntryEventAddEntryEventAddLedgerEntryResponse includes the requested fields of the GraphQL type AddLedgerEntryResponse.
@@ -118,6 +190,28 @@ func (v *AddEntryOpenResponse) GetAddEntryOpen() AddEntryOpenAddEntryOpenAddLedg
 	return v.AddEntryOpen
 }
 
+// AddEntryPriceAddEntryPriceAddLedgerEntryResponse includes the requested fields of the GraphQL type AddLedgerEntryResponse.
+type AddEntryPriceAddEntryPriceAddLedgerEntryResponse struct {
+	Success bool    `json:"success"`
+	Message *string `json:"message"`
+}
+
+// GetSuccess returns AddEntryPriceAddEntryPriceAddLedgerEntryResponse.Success, and is useful for accessing the field via an interface.
+func (v *AddEntryPriceAddEntryPriceAddLedgerEntryResponse) GetSuccess() bool { return v.Success }
+
+// GetMessage returns AddEntryPriceAddEntryPriceAddLedgerEntryResponse.Message, and is useful for accessing the field via an interface.
+func (v *AddEntryPriceAddEntryPriceAddLedgerEntryResponse) GetMessage() *string { return v.Message }
+
+// AddEntryPriceResponse is returned by AddEntryPrice on success.
+type AddEntryPriceResponse struct {
+	AddEntryPrice AddEntryPriceAddEntryPriceAddLedgerEntryResponse `json:"addEntryPrice"`
+}
+
+// GetAddEntryPrice returns AddEntryPriceResponse.AddEntryPrice, and is useful for accessing the field via an interface.
+func (v *AddEntryPriceResponse) GetAddEntryPrice() AddEntryPriceAddEntryPriceAddLedgerEntryResponse {
+	return v.AddEntryPrice
+}
+
 // AddEntryTransactionAddEntryTransactionAddLedgerEntryResponse includes the requested fields of the GraphQL type AddLedgerEntryResponse.
 type AddEntryTransactionAddEntryTransactionAddLedgerEntryResponse struct {
 	Success bool    `json:"success"`
@@ -142,6 +236,25 @@ type AddEntryTransactionResponse struct {
 // GetAddEntryTransaction returns AddEntryTransactionResponse.AddEntryTransaction, and is useful for accessing the field via an interface.
 func (v *AddEntryTransactionResponse) GetAddEntryTransaction() AddEntryTransactionAddEntryTransactionAddLedgerEntryResponse {
 	return v.AddEntryTransaction
+}
+
+// Budget recurrence interval
+type BudgetInterval string
+
+const (
+	BudgetIntervalDaily     BudgetInterval = "DAILY"
+	BudgetIntervalWeekly    BudgetInterval = "WEEKLY"
+	BudgetIntervalMonthly   BudgetInterval = "MONTHLY"
+	BudgetIntervalQuarterly BudgetInterval = "QUARTERLY"
+	BudgetIntervalYearly    BudgetInterval = "YEARLY"
+)
+
+var AllBudgetInterval = []BudgetInterval{
+	BudgetIntervalDaily,
+	BudgetIntervalWeekly,
+	BudgetIntervalMonthly,
+	BudgetIntervalQuarterly,
+	BudgetIntervalYearly,
 }
 
 // Status of a CLI authentication session
@@ -345,6 +458,25 @@ func (v *LedgerBalanceInput) GetAccount() string { return v.Account }
 // GetAmount returns LedgerBalanceInput.Amount, and is useful for accessing the field via an interface.
 func (v *LedgerBalanceInput) GetAmount() LedgerAmountInput { return v.Amount }
 
+type LedgerBudgetInput struct {
+	Date     string            `json:"date"`
+	Account  string            `json:"account"`
+	Interval BudgetInterval    `json:"interval"`
+	Amount   LedgerAmountInput `json:"amount"`
+}
+
+// GetDate returns LedgerBudgetInput.Date, and is useful for accessing the field via an interface.
+func (v *LedgerBudgetInput) GetDate() string { return v.Date }
+
+// GetAccount returns LedgerBudgetInput.Account, and is useful for accessing the field via an interface.
+func (v *LedgerBudgetInput) GetAccount() string { return v.Account }
+
+// GetInterval returns LedgerBudgetInput.Interval, and is useful for accessing the field via an interface.
+func (v *LedgerBudgetInput) GetInterval() BudgetInterval { return v.Interval }
+
+// GetAmount returns LedgerBudgetInput.Amount, and is useful for accessing the field via an interface.
+func (v *LedgerBudgetInput) GetAmount() LedgerAmountInput { return v.Amount }
+
 type LedgerCloseInput struct {
 	Date    string `json:"date"`
 	Account string `json:"account"`
@@ -355,6 +487,40 @@ func (v *LedgerCloseInput) GetDate() string { return v.Date }
 
 // GetAccount returns LedgerCloseInput.Account, and is useful for accessing the field via an interface.
 func (v *LedgerCloseInput) GetAccount() string { return v.Account }
+
+type LedgerCommodityInput struct {
+	Date     string `json:"date"`
+	Currency string `json:"currency"`
+}
+
+// GetDate returns LedgerCommodityInput.Date, and is useful for accessing the field via an interface.
+func (v *LedgerCommodityInput) GetDate() string { return v.Date }
+
+// GetCurrency returns LedgerCommodityInput.Currency, and is useful for accessing the field via an interface.
+func (v *LedgerCommodityInput) GetCurrency() string { return v.Currency }
+
+type LedgerDocumentInput struct {
+	Date     string   `json:"date"`
+	Account  string   `json:"account"`
+	Filename string   `json:"filename"`
+	Tags     []string `json:"tags"`
+	Links    []string `json:"links"`
+}
+
+// GetDate returns LedgerDocumentInput.Date, and is useful for accessing the field via an interface.
+func (v *LedgerDocumentInput) GetDate() string { return v.Date }
+
+// GetAccount returns LedgerDocumentInput.Account, and is useful for accessing the field via an interface.
+func (v *LedgerDocumentInput) GetAccount() string { return v.Account }
+
+// GetFilename returns LedgerDocumentInput.Filename, and is useful for accessing the field via an interface.
+func (v *LedgerDocumentInput) GetFilename() string { return v.Filename }
+
+// GetTags returns LedgerDocumentInput.Tags, and is useful for accessing the field via an interface.
+func (v *LedgerDocumentInput) GetTags() []string { return v.Tags }
+
+// GetLinks returns LedgerDocumentInput.Links, and is useful for accessing the field via an interface.
+func (v *LedgerDocumentInput) GetLinks() []string { return v.Links }
 
 type LedgerEventInput struct {
 	Date        string `json:"date"`
@@ -419,6 +585,21 @@ func (v *LedgerPostingInput) GetPrice() *LedgerAmountInput { return v.Price }
 
 // GetFlag returns LedgerPostingInput.Flag, and is useful for accessing the field via an interface.
 func (v *LedgerPostingInput) GetFlag() *string { return v.Flag }
+
+type LedgerPriceInput struct {
+	Date     string            `json:"date"`
+	Currency string            `json:"currency"`
+	Amount   LedgerAmountInput `json:"amount"`
+}
+
+// GetDate returns LedgerPriceInput.Date, and is useful for accessing the field via an interface.
+func (v *LedgerPriceInput) GetDate() string { return v.Date }
+
+// GetCurrency returns LedgerPriceInput.Currency, and is useful for accessing the field via an interface.
+func (v *LedgerPriceInput) GetCurrency() string { return v.Currency }
+
+// GetAmount returns LedgerPriceInput.Amount, and is useful for accessing the field via an interface.
+func (v *LedgerPriceInput) GetAmount() LedgerAmountInput { return v.Amount }
 
 type LedgerTransactionInput struct {
 	Date      string               `json:"date"`
@@ -523,6 +704,18 @@ func (v *__AddEntryBalanceInput) GetLedgerId() string { return v.LedgerId }
 // GetBalance returns __AddEntryBalanceInput.Balance, and is useful for accessing the field via an interface.
 func (v *__AddEntryBalanceInput) GetBalance() LedgerBalanceInput { return v.Balance }
 
+// __AddEntryBudgetInput is used internally by genqlient
+type __AddEntryBudgetInput struct {
+	LedgerId string            `json:"ledgerId"`
+	Budget   LedgerBudgetInput `json:"budget"`
+}
+
+// GetLedgerId returns __AddEntryBudgetInput.LedgerId, and is useful for accessing the field via an interface.
+func (v *__AddEntryBudgetInput) GetLedgerId() string { return v.LedgerId }
+
+// GetBudget returns __AddEntryBudgetInput.Budget, and is useful for accessing the field via an interface.
+func (v *__AddEntryBudgetInput) GetBudget() LedgerBudgetInput { return v.Budget }
+
 // __AddEntryCloseInput is used internally by genqlient
 type __AddEntryCloseInput struct {
 	LedgerId string           `json:"ledgerId"`
@@ -534,6 +727,30 @@ func (v *__AddEntryCloseInput) GetLedgerId() string { return v.LedgerId }
 
 // GetClose returns __AddEntryCloseInput.Close, and is useful for accessing the field via an interface.
 func (v *__AddEntryCloseInput) GetClose() LedgerCloseInput { return v.Close }
+
+// __AddEntryCommodityInput is used internally by genqlient
+type __AddEntryCommodityInput struct {
+	LedgerId  string               `json:"ledgerId"`
+	Commodity LedgerCommodityInput `json:"commodity"`
+}
+
+// GetLedgerId returns __AddEntryCommodityInput.LedgerId, and is useful for accessing the field via an interface.
+func (v *__AddEntryCommodityInput) GetLedgerId() string { return v.LedgerId }
+
+// GetCommodity returns __AddEntryCommodityInput.Commodity, and is useful for accessing the field via an interface.
+func (v *__AddEntryCommodityInput) GetCommodity() LedgerCommodityInput { return v.Commodity }
+
+// __AddEntryDocumentInput is used internally by genqlient
+type __AddEntryDocumentInput struct {
+	LedgerId string              `json:"ledgerId"`
+	Document LedgerDocumentInput `json:"document"`
+}
+
+// GetLedgerId returns __AddEntryDocumentInput.LedgerId, and is useful for accessing the field via an interface.
+func (v *__AddEntryDocumentInput) GetLedgerId() string { return v.LedgerId }
+
+// GetDocument returns __AddEntryDocumentInput.Document, and is useful for accessing the field via an interface.
+func (v *__AddEntryDocumentInput) GetDocument() LedgerDocumentInput { return v.Document }
 
 // __AddEntryEventInput is used internally by genqlient
 type __AddEntryEventInput struct {
@@ -570,6 +787,18 @@ func (v *__AddEntryOpenInput) GetLedgerId() string { return v.LedgerId }
 
 // GetOpen returns __AddEntryOpenInput.Open, and is useful for accessing the field via an interface.
 func (v *__AddEntryOpenInput) GetOpen() LedgerOpenInput { return v.Open }
+
+// __AddEntryPriceInput is used internally by genqlient
+type __AddEntryPriceInput struct {
+	LedgerId string           `json:"ledgerId"`
+	Price    LedgerPriceInput `json:"price"`
+}
+
+// GetLedgerId returns __AddEntryPriceInput.LedgerId, and is useful for accessing the field via an interface.
+func (v *__AddEntryPriceInput) GetLedgerId() string { return v.LedgerId }
+
+// GetPrice returns __AddEntryPriceInput.Price, and is useful for accessing the field via an interface.
+func (v *__AddEntryPriceInput) GetPrice() LedgerPriceInput { return v.Price }
 
 // __AddEntryTransactionInput is used internally by genqlient
 type __AddEntryTransactionInput struct {
@@ -656,6 +885,43 @@ func AddEntryBalance(
 	return data_, err_
 }
 
+// The mutation executed by AddEntryBudget.
+const AddEntryBudget_Operation = `
+mutation AddEntryBudget ($ledgerId: String!, $budget: LedgerBudgetInput!) {
+	addEntryBudget(ledgerId: $ledgerId, budget: $budget) {
+		success
+		message
+	}
+}
+`
+
+func AddEntryBudget(
+	ctx_ context.Context,
+	client_ graphql.Client,
+	ledgerId string,
+	budget LedgerBudgetInput,
+) (data_ *AddEntryBudgetResponse, err_ error) {
+	req_ := &graphql.Request{
+		OpName: "AddEntryBudget",
+		Query:  AddEntryBudget_Operation,
+		Variables: &__AddEntryBudgetInput{
+			LedgerId: ledgerId,
+			Budget:   budget,
+		},
+	}
+
+	data_ = &AddEntryBudgetResponse{}
+	resp_ := &graphql.Response{Data: data_}
+
+	err_ = client_.MakeRequest(
+		ctx_,
+		req_,
+		resp_,
+	)
+
+	return data_, err_
+}
+
 // The mutation executed by AddEntryClose.
 const AddEntryClose_Operation = `
 mutation AddEntryClose ($ledgerId: String!, $close: LedgerCloseInput!) {
@@ -682,6 +948,80 @@ func AddEntryClose(
 	}
 
 	data_ = &AddEntryCloseResponse{}
+	resp_ := &graphql.Response{Data: data_}
+
+	err_ = client_.MakeRequest(
+		ctx_,
+		req_,
+		resp_,
+	)
+
+	return data_, err_
+}
+
+// The mutation executed by AddEntryCommodity.
+const AddEntryCommodity_Operation = `
+mutation AddEntryCommodity ($ledgerId: String!, $commodity: LedgerCommodityInput!) {
+	addEntryCommodity(ledgerId: $ledgerId, commodity: $commodity) {
+		success
+		message
+	}
+}
+`
+
+func AddEntryCommodity(
+	ctx_ context.Context,
+	client_ graphql.Client,
+	ledgerId string,
+	commodity LedgerCommodityInput,
+) (data_ *AddEntryCommodityResponse, err_ error) {
+	req_ := &graphql.Request{
+		OpName: "AddEntryCommodity",
+		Query:  AddEntryCommodity_Operation,
+		Variables: &__AddEntryCommodityInput{
+			LedgerId:  ledgerId,
+			Commodity: commodity,
+		},
+	}
+
+	data_ = &AddEntryCommodityResponse{}
+	resp_ := &graphql.Response{Data: data_}
+
+	err_ = client_.MakeRequest(
+		ctx_,
+		req_,
+		resp_,
+	)
+
+	return data_, err_
+}
+
+// The mutation executed by AddEntryDocument.
+const AddEntryDocument_Operation = `
+mutation AddEntryDocument ($ledgerId: String!, $document: LedgerDocumentInput!) {
+	addEntryDocument(ledgerId: $ledgerId, document: $document) {
+		success
+		message
+	}
+}
+`
+
+func AddEntryDocument(
+	ctx_ context.Context,
+	client_ graphql.Client,
+	ledgerId string,
+	document LedgerDocumentInput,
+) (data_ *AddEntryDocumentResponse, err_ error) {
+	req_ := &graphql.Request{
+		OpName: "AddEntryDocument",
+		Query:  AddEntryDocument_Operation,
+		Variables: &__AddEntryDocumentInput{
+			LedgerId: ledgerId,
+			Document: document,
+		},
+	}
+
+	data_ = &AddEntryDocumentResponse{}
 	resp_ := &graphql.Response{Data: data_}
 
 	err_ = client_.MakeRequest(
@@ -793,6 +1133,43 @@ func AddEntryOpen(
 	}
 
 	data_ = &AddEntryOpenResponse{}
+	resp_ := &graphql.Response{Data: data_}
+
+	err_ = client_.MakeRequest(
+		ctx_,
+		req_,
+		resp_,
+	)
+
+	return data_, err_
+}
+
+// The mutation executed by AddEntryPrice.
+const AddEntryPrice_Operation = `
+mutation AddEntryPrice ($ledgerId: String!, $price: LedgerPriceInput!) {
+	addEntryPrice(ledgerId: $ledgerId, price: $price) {
+		success
+		message
+	}
+}
+`
+
+func AddEntryPrice(
+	ctx_ context.Context,
+	client_ graphql.Client,
+	ledgerId string,
+	price LedgerPriceInput,
+) (data_ *AddEntryPriceResponse, err_ error) {
+	req_ := &graphql.Request{
+		OpName: "AddEntryPrice",
+		Query:  AddEntryPrice_Operation,
+		Variables: &__AddEntryPriceInput{
+			LedgerId: ledgerId,
+			Price:    price,
+		},
+	}
+
+	data_ = &AddEntryPriceResponse{}
 	resp_ := &graphql.Response{Data: data_}
 
 	err_ = client_.MakeRequest(
