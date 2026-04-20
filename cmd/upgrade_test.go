@@ -5,6 +5,7 @@ import (
 	"strings"
 	"testing"
 
+	"beancount.io/beancount-cli/internal/config"
 	"beancount.io/beancount-cli/internal/updater"
 )
 
@@ -14,7 +15,7 @@ import (
 
 func TestCheckUpdate_DevBuild(t *testing.T) {
 	for _, ver := range []string{"dev", ""} {
-		_, _, err := updater.CheckUpdate(context.Background(), ver, "stargately/beancount-cli")
+		_, _, err := updater.CheckUpdate(context.Background(), ver, config.RepoSlug)
 		if err == nil {
 			t.Fatalf("version=%q: expected error, got nil", ver)
 		}

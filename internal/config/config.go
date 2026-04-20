@@ -5,6 +5,11 @@ import "os"
 const (
 	DefaultAPIURL       = "https://beancount.io/api-gateway/"
 	DefaultDashboardURL = "https://beancount.io"
+
+	// GitHub repository identity — update both values when migrating repos.
+	RepoOwner = "stargately"
+	RepoName  = "beancount-cli"
+	RepoSlug  = RepoOwner + "/" + RepoName
 )
 
 // Config holds resolved runtime configuration for the CLI.

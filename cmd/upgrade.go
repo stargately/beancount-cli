@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 
+	"beancount.io/beancount-cli/internal/config"
 	"beancount.io/beancount-cli/internal/updater"
 	"github.com/spf13/cobra"
 )
@@ -27,7 +28,7 @@ func init() {
 }
 
 func runUpgrade(cmd *cobra.Command, _ []string) error {
-	result, su, err := updater.CheckUpdate(cmd.Context(), rootCmd.Version, "stargately/beancount-cli")
+	result, su, err := updater.CheckUpdate(cmd.Context(), rootCmd.Version, config.RepoSlug)
 	if err != nil {
 		return err
 	}
