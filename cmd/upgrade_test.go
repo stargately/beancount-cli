@@ -5,7 +5,7 @@ import (
 	"strings"
 	"testing"
 
-	selfupdate "github.com/creativeprojects/go-selfupdate"
+	"beancount.io/beancount-cli/internal/updater"
 )
 
 // ----------------------------------------------------------------------------
@@ -14,7 +14,7 @@ import (
 
 func TestCheckUpdate_DevBuild(t *testing.T) {
 	for _, ver := range []string{"dev", ""} {
-		_, _, err := checkUpdate(context.Background(), ver, "stargately/beancount-cli")
+		_, _, err := updater.CheckUpdate(context.Background(), ver, "stargately/beancount-cli")
 		if err == nil {
 			t.Fatalf("version=%q: expected error, got nil", ver)
 		}
@@ -31,18 +31,17 @@ func TestCheckUpdate_DevBuild(t *testing.T) {
 func TestUpdateResult_Fields(t *testing.T) {
 	tests := []struct {
 		name        string
-		result      updateResult
+		result      updater.UpdateResult
 		wantFound   bool
 		wantCurrent string
 		wantLatest  string
 	}{
 		{
 			name: "update available",
-			result: updateResult{
-				currentVersion: "0.1.0",
-				latestVersion:  "0.2.0",
-				updateFound:    true,
-				release:        &selfupdate.Release{},
+			result: updater.UpdateResult{
+				CurrentVersion: "0.1.0",
+				LatestVersion:  "0.2.0",
+				UpdateFound:    true,
 			},
 			wantFound:   true,
 			wantCurrent: "0.1.0",
@@ -50,10 +49,10 @@ func TestUpdateResult_Fields(t *testing.T) {
 		},
 		{
 			name: "already on latest",
-			result: updateResult{
-				currentVersion: "0.2.0",
-				latestVersion:  "0.2.0",
-				updateFound:    false,
+			result: updater.UpdateResult{
+				CurrentVersion: "0.2.0",
+				LatestVersion:  "0.2.0",
+				UpdateFound:    false,
 			},
 			wantFound:   false,
 			wantCurrent: "0.2.0",
@@ -61,10 +60,10 @@ func TestUpdateResult_Fields(t *testing.T) {
 		},
 		{
 			name: "no release found",
-			result: updateResult{
-				currentVersion: "0.1.0",
-				latestVersion:  "",
-				updateFound:    false,
+			result: updater.UpdateResult{
+				CurrentVersion: "0.1.0",
+				LatestVersion:  "",
+				UpdateFound:    false,
 			},
 			wantFound:   false,
 			wantCurrent: "0.1.0",
@@ -74,14 +73,14 @@ func TestUpdateResult_Fields(t *testing.T) {
 
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
-			if tc.result.updateFound != tc.wantFound {
-				t.Errorf("updateFound: got %v, want %v", tc.result.updateFound, tc.wantFound)
+			if tc.result.UpdateFound != tc.wantFound {
+				t.Errorf("UpdateFound: got %v, want %v", tc.result.UpdateFound, tc.wantFound)
 			}
-			if tc.result.currentVersion != tc.wantCurrent {
-				t.Errorf("currentVersion: got %q, want %q", tc.result.currentVersion, tc.wantCurrent)
+			if tc.result.CurrentVersion != tc.wantCurrent {
+				t.Errorf("CurrentVersion: got %q, want %q", tc.result.CurrentVersion, tc.wantCurrent)
 			}
-			if tc.result.latestVersion != tc.wantLatest {
-				t.Errorf("latestVersion: got %q, want %q", tc.result.latestVersion, tc.wantLatest)
+			if tc.result.LatestVersion != tc.wantLatest {
+				t.Errorf("LatestVersion: got %q, want %q", tc.result.LatestVersion, tc.wantLatest)
 			}
 		})
 	}
