@@ -6,6 +6,8 @@ import (
 	"io"
 	"os"
 	"time"
+
+	"beancount.io/beancount-cli/internal/config"
 )
 
 // StartUpdateCheck launches a background goroutine and returns a channel that
@@ -28,7 +30,7 @@ func StartUpdateCheck(version string) <-chan UpdateResult {
 
 		var result UpdateResult
 		if IsStale(state) {
-			r, _, err := CheckUpdate(ctx, version, "stargately/beancount-cli")
+			r, _, err := CheckUpdate(ctx, version, config.RepoSlug)
 			if err == nil {
 				result = r
 				_ = SaveState(&State{
@@ -57,7 +59,7 @@ func PrintUpdateTip(w io.Writer, result UpdateResult) {
 	}
 	fmt.Fprintf(w, "\nA new release of beancount-cli is available: %s → %s\n", result.CurrentVersion, result.LatestVersion)
 	fmt.Fprintf(w, "To upgrade, run: %s\n", UpgradeCommand())
-	fmt.Fprintf(w, "https://github.com/stargately/beancount-cli/releases/tag/v%s\n\n", result.LatestVersion)
+	fmt.Fprintf(w, "https://github.com/%s/%s/releases/tag/v%s\n\n", config.RepoOwner, config.RepoName, result.LatestVersion)
 }
 
 func isStderrTerminal() bool {
