@@ -103,3 +103,31 @@ mutation AddEntryEvent($ledgerId: String!, $event: LedgerEventInput!) {
     message
   }
 }
+
+mutation AddEntryPrice($ledgerId: String!, $price: LedgerPriceInput!) {
+  addEntryPrice(ledgerId: $ledgerId, price: $price) {
+    success
+    message
+  }
+}
+
+mutation AddEntryCommodity($ledgerId: String!, $commodity: LedgerCommodityInput!) {
+  addEntryCommodity(ledgerId: $ledgerId, commodity: $commodity) {
+    success
+    message
+  }
+}
+
+mutation AddEntryBudget($ledgerId: String!, $budget: LedgerBudgetInput!) {
+  addEntryBudget(ledgerId: $ledgerId, budget: $budget) {
+    success
+    message
+  }
+}
+
+mutation AddEntryDocument($ledgerId: String!, $document: LedgerDocumentInput!) {
+  addEntryDocument(ledgerId: $ledgerId, document: $document) {
+    success
+    message
+  }
+}

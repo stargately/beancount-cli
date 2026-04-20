@@ -15,7 +15,7 @@ func TestBuildOpenInput(t *testing.T) {
 		name       string
 		date       string
 		account    string
-		currencies []string
+		currencies string
 		check      func(t *testing.T, got generated.LedgerOpenInput)
 		wantErr    string
 	}{
@@ -23,7 +23,7 @@ func TestBuildOpenInput(t *testing.T) {
 			name:       "all fields set",
 			date:       "2024-01-01",
 			account:    "Expenses:Food:Coffee",
-			currencies: []string{"USD", "EUR"},
+			currencies: "USD,EUR",
 			check: func(t *testing.T, got generated.LedgerOpenInput) {
 				t.Helper()
 				if got.Date != "2024-01-01" {
@@ -41,7 +41,7 @@ func TestBuildOpenInput(t *testing.T) {
 			name:       "empty date defaults to today",
 			date:       "",
 			account:    "Assets:Checking",
-			currencies: nil,
+			currencies: "",
 			check: func(t *testing.T, got generated.LedgerOpenInput) {
 				t.Helper()
 				if got.Date != today {
@@ -50,10 +50,10 @@ func TestBuildOpenInput(t *testing.T) {
 			},
 		},
 		{
-			name:       "nil currencies become empty slice",
+			name:       "empty currencies become empty slice",
 			date:       "2024-01-01",
 			account:    "Assets:Checking",
-			currencies: nil,
+			currencies: "",
 			check: func(t *testing.T, got generated.LedgerOpenInput) {
 				t.Helper()
 				if got.Currencies == nil {
@@ -68,7 +68,7 @@ func TestBuildOpenInput(t *testing.T) {
 			name:       "multiple currencies preserve order",
 			date:       "2024-01-01",
 			account:    "Assets:Wallet",
-			currencies: []string{"BTC", "ETH", "USD"},
+			currencies: "BTC,ETH,USD",
 			check: func(t *testing.T, got generated.LedgerOpenInput) {
 				t.Helper()
 				if len(got.Currencies) != 3 {
@@ -82,6 +82,21 @@ func TestBuildOpenInput(t *testing.T) {
 				}
 				if got.Currencies[2] != "USD" {
 					t.Errorf("Currencies[2]: got %q, want USD", got.Currencies[2])
+				}
+			},
+		},
+		{
+			name:       "currencies with spaces are trimmed",
+			date:       "2024-01-01",
+			account:    "Assets:Brokerage",
+			currencies: "USD, EUR , GBP",
+			check: func(t *testing.T, got generated.LedgerOpenInput) {
+				t.Helper()
+				if len(got.Currencies) != 3 {
+					t.Fatalf("Currencies: got %d, want 3", len(got.Currencies))
+				}
+				if got.Currencies[1] != "EUR" {
+					t.Errorf("Currencies[1]: got %q, want EUR", got.Currencies[1])
 				}
 			},
 		},
