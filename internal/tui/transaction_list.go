@@ -13,6 +13,9 @@ import (
 	"github.com/Khan/genqlient/graphql"
 )
 
+// PageSize is the number of items fetched per page in interactive mode.
+const PageSize = 100
+
 type viewState int
 
 const (
@@ -45,14 +48,28 @@ type PostingUnits struct {
 
 type contextFetchedMsg struct{ sha256sum string }
 type deletedMsg struct{}
-type refetchedMsg struct{ items []Transaction }
+type refetchedMsg struct {
+	items []Transaction
+	total int
+}
+type moreItemsMsg struct {
+	items []Transaction
+	total int
+}
+type rangeRefetchedMsg struct {
+	items []Transaction
+	start int
+	total int
+}
 type errMsg struct{ err error }
 
 type TransactionListModel struct {
 	items         []Transaction
+	total         int
 	cursor        int
 	offset        int
 	state         viewState
+	errTarget     viewState
 	ledgerName    string
 	ledgerID      string
 	client        graphql.Client
@@ -60,6 +77,8 @@ type TransactionListModel struct {
 	width         int
 	height        int
 	loading       bool
+	fetchingMore  bool
+	hasMore       bool
 	err           error
 	status        string
 	pendingStatus string
@@ -67,9 +86,17 @@ type TransactionListModel struct {
 	pendingHash   string
 }
 
-func NewTransactionList(ledgerName, ledgerID string, client graphql.Client, query *generated.JournalQueryInput, items []Transaction) TransactionListModel {
+func NewTransactionList(
+	ledgerName, ledgerID string,
+	client graphql.Client,
+	query *generated.JournalQueryInput,
+	items []Transaction,
+	total int,
+) TransactionListModel {
 	return TransactionListModel{
 		items:      items,
+		total:      total,
+		hasMore:    len(items) < total,
 		ledgerName: ledgerName,
 		ledgerID:   ledgerID,
 		client:     client,
@@ -112,10 +139,37 @@ func (m TransactionListModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		m.pendingStatus = "Transaction deleted."
 		m.ctxSha = ""
 		m.pendingHash = ""
-		return m, m.refetchCmd()
+		m.errTarget = stateList
+		return m, m.refetchRangeCmd()
 
 	case refetchedMsg:
 		m.items = msg.items
+		m.total = msg.total
+		m.hasMore = len(msg.items) < msg.total
+		m.loading = false
+		m.fetchingMore = false
+		m.cursor = 0
+		m.offset = 0
+		m.status = m.pendingStatus
+		m.pendingStatus = ""
+
+	case moreItemsMsg:
+		m.fetchingMore = false
+		if len(msg.items) > 0 {
+			m.items = append(m.items, msg.items...)
+		}
+		m.total = msg.total
+		m.hasMore = len(m.items) < msg.total
+
+	case rangeRefetchedMsg:
+		end := min(msg.start+PageSize, len(m.items))
+		var updated []Transaction
+		updated = append(updated, m.items[:msg.start]...)
+		updated = append(updated, msg.items...)
+		updated = append(updated, m.items[end:]...)
+		m.items = updated
+		m.total = msg.total
+		m.hasMore = len(m.items) < msg.total
 		m.loading = false
 		m.status = m.pendingStatus
 		m.pendingStatus = ""
@@ -125,7 +179,9 @@ func (m TransactionListModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 	case errMsg:
 		m.err = msg.err
-		m.state = stateDetail
+		m.loading = false
+		m.fetchingMore = false
+		m.state = m.errTarget
 		m.ctxSha = ""
 		m.pendingHash = ""
 	}
@@ -154,6 +210,11 @@ func (m TransactionListModel) handleKey(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 					m.offset++
 				}
 			}
+			if m.hasMore && !m.fetchingMore && len(m.items)-m.cursor < 50 {
+				m.fetchingMore = true
+				m.errTarget = stateList
+				return m, m.loadMoreCmd()
+			}
 		case "enter":
 			if len(m.items) > 0 {
 				m.state = stateDetail
@@ -161,10 +222,11 @@ func (m TransactionListModel) handleKey(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 				m.err = nil
 			}
 		case "r":
-			if !m.loading {
+			if !m.loading && !m.fetchingMore {
 				m.loading = true
 				m.status = ""
 				m.err = nil
+				m.errTarget = stateList
 				return m, m.refetchCmd()
 			}
 		}
@@ -179,6 +241,7 @@ func (m TransactionListModel) handleKey(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 		case "d":
 			if len(m.items) > 0 {
 				m.pendingHash = m.items[m.cursor].EntryHash
+				m.errTarget = stateDetail
 				return m, m.fetchContextCmd()
 			}
 		}
@@ -187,6 +250,7 @@ func (m TransactionListModel) handleKey(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 		switch msg.String() {
 		case "y":
 			m.state = stateDeleting
+			m.errTarget = stateDetail
 			return m, m.doDeleteCmd()
 		case "n", "esc":
 			m.state = stateDetail
@@ -225,10 +289,16 @@ func (m TransactionListModel) doDeleteCmd() tea.Cmd {
 	}
 }
 
+// refetchCmd resets to page 0 and replaces all items. Used for manual refresh (r).
 func (m TransactionListModel) refetchCmd() tea.Cmd {
 	client, ledgerID, query := m.client, m.ledgerID, m.query
 	return func() tea.Msg {
-		resp, err := generated.GetLedgerJournal(context.Background(), client, ledgerID, query)
+		q := *query
+		offset := float64(0)
+		limit := float64(PageSize)
+		q.Offset = &offset
+		q.Limit = &limit
+		resp, err := generated.GetLedgerJournal(context.Background(), client, ledgerID, &q)
 		if err != nil {
 			return errMsg{err}
 		}
@@ -236,7 +306,50 @@ func (m TransactionListModel) refetchCmd() tea.Cmd {
 		if err != nil {
 			return errMsg{err}
 		}
-		return refetchedMsg{items}
+		return refetchedMsg{items: items, total: int(resp.GetLedgerJournal.Total)}
+	}
+}
+
+// loadMoreCmd appends the next page. Triggered automatically when cursor nears the end.
+func (m TransactionListModel) loadMoreCmd() tea.Cmd {
+	client, ledgerID, query, offset := m.client, m.ledgerID, m.query, len(m.items)
+	return func() tea.Msg {
+		q := *query
+		o := float64(offset)
+		limit := float64(PageSize)
+		q.Offset = &o
+		q.Limit = &limit
+		resp, err := generated.GetLedgerJournal(context.Background(), client, ledgerID, &q)
+		if err != nil {
+			return errMsg{err}
+		}
+		items, err := DecodeTransactions(resp.GetLedgerJournal.Data)
+		if err != nil {
+			return errMsg{err}
+		}
+		return moreItemsMsg{items: items, total: int(resp.GetLedgerJournal.Total)}
+	}
+}
+
+// refetchRangeCmd refreshes only the page containing the cursor. Used after delete.
+func (m TransactionListModel) refetchRangeCmd() tea.Cmd {
+	client, ledgerID, query := m.client, m.ledgerID, m.query
+	start := (m.cursor / PageSize) * PageSize
+	return func() tea.Msg {
+		q := *query
+		o := float64(start)
+		limit := float64(PageSize)
+		q.Offset = &o
+		q.Limit = &limit
+		resp, err := generated.GetLedgerJournal(context.Background(), client, ledgerID, &q)
+		if err != nil {
+			return errMsg{err}
+		}
+		items, err := DecodeTransactions(resp.GetLedgerJournal.Data)
+		if err != nil {
+			return errMsg{err}
+		}
+		return rangeRefetchedMsg{items: items, start: start, total: int(resp.GetLedgerJournal.Total)}
 	}
 }
 
@@ -298,12 +411,14 @@ func (m TransactionListModel) listView() string {
 	sb.WriteString("\n")
 	if m.loading {
 		sb.WriteString(dimStyle.Render("  Refreshing...") + "\n")
+	} else if m.fetchingMore {
+		sb.WriteString(dimStyle.Render(fmt.Sprintf("  %d / %d   Loading more...", len(m.items), m.total)) + "\n")
 	} else if m.err != nil {
 		sb.WriteString(errorStyle.Render("  Error: "+m.err.Error()) + "\n")
 	} else if m.status != "" {
 		sb.WriteString(successStyle.Render("  "+m.status) + "\n")
 	} else {
-		fmt.Fprintf(&sb, "%s\n", dimStyle.Render(fmt.Sprintf("  %d transactions", len(m.items))))
+		fmt.Fprintf(&sb, "%s\n", dimStyle.Render(fmt.Sprintf("  %d / %d", len(m.items), m.total)))
 	}
 	sb.WriteString(dimStyle.Render("  ↑↓/jk navigate   enter detail   r refresh   q quit"))
 
