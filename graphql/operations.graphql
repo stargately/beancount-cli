@@ -137,3 +137,25 @@ query QueryShellText($ledgerId: String!, $query: String!) {
     text
   }
 }
+
+query GetLedgerJournal($ledgerId: String!, $query: JournalQueryInput) {
+  getLedgerJournal(ledgerId: $ledgerId, query: $query) {
+    total
+    data
+    is_empty
+  }
+}
+
+query GetLedgerEntryContext($ledgerId: String!, $entryHash: String!) {
+  getLedgerEntryContext(entryHash: $entryHash, ledgerId: $ledgerId) {
+    sha256sum
+    slice
+  }
+}
+
+mutation DeleteLedgerEntrySourceSlice($ledgerId: String!, $input: DeleteSourceSliceInput!) {
+  deleteLedgerEntrySourceSlice(input: $input, ledgerId: $ledgerId) {
+    message
+    entryHash
+  }
+}

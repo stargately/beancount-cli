@@ -4,3 +4,6 @@ operations:
 generated: generated/genqlient.go
 package: generated
 optional: pointer
+bindings:
+  JSONObject:
+    type: interface{}
