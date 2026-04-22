@@ -372,6 +372,32 @@ type DeleteLedgerDeleteLedgerDeleteLedgerResponse struct {
 // GetLedgerId returns DeleteLedgerDeleteLedgerDeleteLedgerResponse.LedgerId, and is useful for accessing the field via an interface.
 func (v *DeleteLedgerDeleteLedgerDeleteLedgerResponse) GetLedgerId() string { return v.LedgerId }
 
+// DeleteLedgerEntrySourceSliceDeleteLedgerEntrySourceSliceDeleteSourceSliceResponse includes the requested fields of the GraphQL type DeleteSourceSliceResponse.
+type DeleteLedgerEntrySourceSliceDeleteLedgerEntrySourceSliceDeleteSourceSliceResponse struct {
+	Message   string `json:"message"`
+	EntryHash string `json:"entryHash"`
+}
+
+// GetMessage returns DeleteLedgerEntrySourceSliceDeleteLedgerEntrySourceSliceDeleteSourceSliceResponse.Message, and is useful for accessing the field via an interface.
+func (v *DeleteLedgerEntrySourceSliceDeleteLedgerEntrySourceSliceDeleteSourceSliceResponse) GetMessage() string {
+	return v.Message
+}
+
+// GetEntryHash returns DeleteLedgerEntrySourceSliceDeleteLedgerEntrySourceSliceDeleteSourceSliceResponse.EntryHash, and is useful for accessing the field via an interface.
+func (v *DeleteLedgerEntrySourceSliceDeleteLedgerEntrySourceSliceDeleteSourceSliceResponse) GetEntryHash() string {
+	return v.EntryHash
+}
+
+// DeleteLedgerEntrySourceSliceResponse is returned by DeleteLedgerEntrySourceSlice on success.
+type DeleteLedgerEntrySourceSliceResponse struct {
+	DeleteLedgerEntrySourceSlice DeleteLedgerEntrySourceSliceDeleteLedgerEntrySourceSliceDeleteSourceSliceResponse `json:"deleteLedgerEntrySourceSlice"`
+}
+
+// GetDeleteLedgerEntrySourceSlice returns DeleteLedgerEntrySourceSliceResponse.DeleteLedgerEntrySourceSlice, and is useful for accessing the field via an interface.
+func (v *DeleteLedgerEntrySourceSliceResponse) GetDeleteLedgerEntrySourceSlice() DeleteLedgerEntrySourceSliceDeleteLedgerEntrySourceSliceDeleteSourceSliceResponse {
+	return v.DeleteLedgerEntrySourceSlice
+}
+
 // DeleteLedgerResponse is returned by DeleteLedger on success.
 type DeleteLedgerResponse struct {
 	DeleteLedger DeleteLedgerDeleteLedgerDeleteLedgerResponse `json:"deleteLedger"`
@@ -381,6 +407,17 @@ type DeleteLedgerResponse struct {
 func (v *DeleteLedgerResponse) GetDeleteLedger() DeleteLedgerDeleteLedgerDeleteLedgerResponse {
 	return v.DeleteLedger
 }
+
+type DeleteSourceSliceInput struct {
+	EntryHash string `json:"entryHash"`
+	Sha256sum string `json:"sha256sum"`
+}
+
+// GetEntryHash returns DeleteSourceSliceInput.EntryHash, and is useful for accessing the field via an interface.
+func (v *DeleteSourceSliceInput) GetEntryHash() string { return v.EntryHash }
+
+// GetSha256sum returns DeleteSourceSliceInput.Sha256sum, and is useful for accessing the field via an interface.
+func (v *DeleteSourceSliceInput) GetSha256sum() string { return v.Sha256sum }
 
 // GetCliAuthSessionGetCliAuthSessionGetCliAuthSessionResponse includes the requested fields of the GraphQL type GetCliAuthSessionResponse.
 type GetCliAuthSessionGetCliAuthSessionGetCliAuthSessionResponse struct {
@@ -431,6 +468,93 @@ func (v *GetCurrentUserUserProfileUserProfileResponse) GetUsername() *string { r
 
 // GetTier returns GetCurrentUserUserProfileUserProfileResponse.Tier, and is useful for accessing the field via an interface.
 func (v *GetCurrentUserUserProfileUserProfileResponse) GetTier() string { return v.Tier }
+
+// GetLedgerEntryContextGetLedgerEntryContext includes the requested fields of the GraphQL type EntryContext.
+type GetLedgerEntryContextGetLedgerEntryContext struct {
+	Sha256sum string `json:"sha256sum"`
+	Slice     string `json:"slice"`
+}
+
+// GetSha256sum returns GetLedgerEntryContextGetLedgerEntryContext.Sha256sum, and is useful for accessing the field via an interface.
+func (v *GetLedgerEntryContextGetLedgerEntryContext) GetSha256sum() string { return v.Sha256sum }
+
+// GetSlice returns GetLedgerEntryContextGetLedgerEntryContext.Slice, and is useful for accessing the field via an interface.
+func (v *GetLedgerEntryContextGetLedgerEntryContext) GetSlice() string { return v.Slice }
+
+// GetLedgerEntryContextResponse is returned by GetLedgerEntryContext on success.
+type GetLedgerEntryContextResponse struct {
+	GetLedgerEntryContext GetLedgerEntryContextGetLedgerEntryContext `json:"getLedgerEntryContext"`
+}
+
+// GetGetLedgerEntryContext returns GetLedgerEntryContextResponse.GetLedgerEntryContext, and is useful for accessing the field via an interface.
+func (v *GetLedgerEntryContextResponse) GetGetLedgerEntryContext() GetLedgerEntryContextGetLedgerEntryContext {
+	return v.GetLedgerEntryContext
+}
+
+// GetLedgerJournalGetLedgerJournalJournalResponse includes the requested fields of the GraphQL type JournalResponse.
+type GetLedgerJournalGetLedgerJournalJournalResponse struct {
+	Total    float64       `json:"total"`
+	Data     []interface{} `json:"data"`
+	Is_empty bool          `json:"is_empty"`
+}
+
+// GetTotal returns GetLedgerJournalGetLedgerJournalJournalResponse.Total, and is useful for accessing the field via an interface.
+func (v *GetLedgerJournalGetLedgerJournalJournalResponse) GetTotal() float64 { return v.Total }
+
+// GetData returns GetLedgerJournalGetLedgerJournalJournalResponse.Data, and is useful for accessing the field via an interface.
+func (v *GetLedgerJournalGetLedgerJournalJournalResponse) GetData() []interface{} { return v.Data }
+
+// GetIs_empty returns GetLedgerJournalGetLedgerJournalJournalResponse.Is_empty, and is useful for accessing the field via an interface.
+func (v *GetLedgerJournalGetLedgerJournalJournalResponse) GetIs_empty() bool { return v.Is_empty }
+
+// GetLedgerJournalResponse is returned by GetLedgerJournal on success.
+type GetLedgerJournalResponse struct {
+	GetLedgerJournal GetLedgerJournalGetLedgerJournalJournalResponse `json:"getLedgerJournal"`
+}
+
+// GetGetLedgerJournal returns GetLedgerJournalResponse.GetLedgerJournal, and is useful for accessing the field via an interface.
+func (v *GetLedgerJournalResponse) GetGetLedgerJournal() GetLedgerJournalGetLedgerJournalJournalResponse {
+	return v.GetLedgerJournal
+}
+
+type JournalQueryInput struct {
+	Account             *string  `json:"account"`
+	Filter              *string  `json:"filter"`
+	Time                *string  `json:"time"`
+	Limit               *float64 `json:"limit"`
+	Offset              *float64 `json:"offset"`
+	DirectiveTypes      []string `json:"directiveTypes"`
+	TransactionSubtypes []string `json:"transactionSubtypes"`
+	DocumentSubtypes    []string `json:"documentSubtypes"`
+	CustomSubtypes      []string `json:"customSubtypes"`
+}
+
+// GetAccount returns JournalQueryInput.Account, and is useful for accessing the field via an interface.
+func (v *JournalQueryInput) GetAccount() *string { return v.Account }
+
+// GetFilter returns JournalQueryInput.Filter, and is useful for accessing the field via an interface.
+func (v *JournalQueryInput) GetFilter() *string { return v.Filter }
+
+// GetTime returns JournalQueryInput.Time, and is useful for accessing the field via an interface.
+func (v *JournalQueryInput) GetTime() *string { return v.Time }
+
+// GetLimit returns JournalQueryInput.Limit, and is useful for accessing the field via an interface.
+func (v *JournalQueryInput) GetLimit() *float64 { return v.Limit }
+
+// GetOffset returns JournalQueryInput.Offset, and is useful for accessing the field via an interface.
+func (v *JournalQueryInput) GetOffset() *float64 { return v.Offset }
+
+// GetDirectiveTypes returns JournalQueryInput.DirectiveTypes, and is useful for accessing the field via an interface.
+func (v *JournalQueryInput) GetDirectiveTypes() []string { return v.DirectiveTypes }
+
+// GetTransactionSubtypes returns JournalQueryInput.TransactionSubtypes, and is useful for accessing the field via an interface.
+func (v *JournalQueryInput) GetTransactionSubtypes() []string { return v.TransactionSubtypes }
+
+// GetDocumentSubtypes returns JournalQueryInput.DocumentSubtypes, and is useful for accessing the field via an interface.
+func (v *JournalQueryInput) GetDocumentSubtypes() []string { return v.DocumentSubtypes }
+
+// GetCustomSubtypes returns JournalQueryInput.CustomSubtypes, and is useful for accessing the field via an interface.
+func (v *JournalQueryInput) GetCustomSubtypes() []string { return v.CustomSubtypes }
 
 type LedgerAmountInput struct {
 	Number   string `json:"number"`
@@ -850,6 +974,18 @@ func (v *__CreateLedgerInput) GetName() string { return v.Name }
 // GetDescription returns __CreateLedgerInput.Description, and is useful for accessing the field via an interface.
 func (v *__CreateLedgerInput) GetDescription() *string { return v.Description }
 
+// __DeleteLedgerEntrySourceSliceInput is used internally by genqlient
+type __DeleteLedgerEntrySourceSliceInput struct {
+	LedgerId string                 `json:"ledgerId"`
+	Input    DeleteSourceSliceInput `json:"input"`
+}
+
+// GetLedgerId returns __DeleteLedgerEntrySourceSliceInput.LedgerId, and is useful for accessing the field via an interface.
+func (v *__DeleteLedgerEntrySourceSliceInput) GetLedgerId() string { return v.LedgerId }
+
+// GetInput returns __DeleteLedgerEntrySourceSliceInput.Input, and is useful for accessing the field via an interface.
+func (v *__DeleteLedgerEntrySourceSliceInput) GetInput() DeleteSourceSliceInput { return v.Input }
+
 // __DeleteLedgerInput is used internally by genqlient
 type __DeleteLedgerInput struct {
 	LedgerId string `json:"ledgerId"`
@@ -865,6 +1001,30 @@ type __GetCliAuthSessionInput struct {
 
 // GetSessionId returns __GetCliAuthSessionInput.SessionId, and is useful for accessing the field via an interface.
 func (v *__GetCliAuthSessionInput) GetSessionId() string { return v.SessionId }
+
+// __GetLedgerEntryContextInput is used internally by genqlient
+type __GetLedgerEntryContextInput struct {
+	LedgerId  string `json:"ledgerId"`
+	EntryHash string `json:"entryHash"`
+}
+
+// GetLedgerId returns __GetLedgerEntryContextInput.LedgerId, and is useful for accessing the field via an interface.
+func (v *__GetLedgerEntryContextInput) GetLedgerId() string { return v.LedgerId }
+
+// GetEntryHash returns __GetLedgerEntryContextInput.EntryHash, and is useful for accessing the field via an interface.
+func (v *__GetLedgerEntryContextInput) GetEntryHash() string { return v.EntryHash }
+
+// __GetLedgerJournalInput is used internally by genqlient
+type __GetLedgerJournalInput struct {
+	LedgerId string             `json:"ledgerId"`
+	Query    *JournalQueryInput `json:"query"`
+}
+
+// GetLedgerId returns __GetLedgerJournalInput.LedgerId, and is useful for accessing the field via an interface.
+func (v *__GetLedgerJournalInput) GetLedgerId() string { return v.LedgerId }
+
+// GetQuery returns __GetLedgerJournalInput.Query, and is useful for accessing the field via an interface.
+func (v *__GetLedgerJournalInput) GetQuery() *JournalQueryInput { return v.Query }
 
 // __QueryShellTextInput is used internally by genqlient
 type __QueryShellTextInput struct {
@@ -1389,6 +1549,43 @@ func DeleteLedger(
 	return data_, err_
 }
 
+// The mutation executed by DeleteLedgerEntrySourceSlice.
+const DeleteLedgerEntrySourceSlice_Operation = `
+mutation DeleteLedgerEntrySourceSlice ($ledgerId: String!, $input: DeleteSourceSliceInput!) {
+	deleteLedgerEntrySourceSlice(input: $input, ledgerId: $ledgerId) {
+		message
+		entryHash
+	}
+}
+`
+
+func DeleteLedgerEntrySourceSlice(
+	ctx_ context.Context,
+	client_ graphql.Client,
+	ledgerId string,
+	input DeleteSourceSliceInput,
+) (data_ *DeleteLedgerEntrySourceSliceResponse, err_ error) {
+	req_ := &graphql.Request{
+		OpName: "DeleteLedgerEntrySourceSlice",
+		Query:  DeleteLedgerEntrySourceSlice_Operation,
+		Variables: &__DeleteLedgerEntrySourceSliceInput{
+			LedgerId: ledgerId,
+			Input:    input,
+		},
+	}
+
+	data_ = &DeleteLedgerEntrySourceSliceResponse{}
+	resp_ := &graphql.Response{Data: data_}
+
+	err_ = client_.MakeRequest(
+		ctx_,
+		req_,
+		resp_,
+	)
+
+	return data_, err_
+}
+
 // The query executed by GetCliAuthSession.
 const GetCliAuthSession_Operation = `
 query GetCliAuthSession ($sessionId: String!) {
@@ -1445,6 +1642,81 @@ func GetCurrentUser(
 	}
 
 	data_ = &GetCurrentUserResponse{}
+	resp_ := &graphql.Response{Data: data_}
+
+	err_ = client_.MakeRequest(
+		ctx_,
+		req_,
+		resp_,
+	)
+
+	return data_, err_
+}
+
+// The query executed by GetLedgerEntryContext.
+const GetLedgerEntryContext_Operation = `
+query GetLedgerEntryContext ($ledgerId: String!, $entryHash: String!) {
+	getLedgerEntryContext(entryHash: $entryHash, ledgerId: $ledgerId) {
+		sha256sum
+		slice
+	}
+}
+`
+
+func GetLedgerEntryContext(
+	ctx_ context.Context,
+	client_ graphql.Client,
+	ledgerId string,
+	entryHash string,
+) (data_ *GetLedgerEntryContextResponse, err_ error) {
+	req_ := &graphql.Request{
+		OpName: "GetLedgerEntryContext",
+		Query:  GetLedgerEntryContext_Operation,
+		Variables: &__GetLedgerEntryContextInput{
+			LedgerId:  ledgerId,
+			EntryHash: entryHash,
+		},
+	}
+
+	data_ = &GetLedgerEntryContextResponse{}
+	resp_ := &graphql.Response{Data: data_}
+
+	err_ = client_.MakeRequest(
+		ctx_,
+		req_,
+		resp_,
+	)
+
+	return data_, err_
+}
+
+// The query executed by GetLedgerJournal.
+const GetLedgerJournal_Operation = `
+query GetLedgerJournal ($ledgerId: String!, $query: JournalQueryInput) {
+	getLedgerJournal(ledgerId: $ledgerId, query: $query) {
+		total
+		data
+		is_empty
+	}
+}
+`
+
+func GetLedgerJournal(
+	ctx_ context.Context,
+	client_ graphql.Client,
+	ledgerId string,
+	query *JournalQueryInput,
+) (data_ *GetLedgerJournalResponse, err_ error) {
+	req_ := &graphql.Request{
+		OpName: "GetLedgerJournal",
+		Query:  GetLedgerJournal_Operation,
+		Variables: &__GetLedgerJournalInput{
+			LedgerId: ledgerId,
+			Query:    query,
+		},
+	}
+
+	data_ = &GetLedgerJournalResponse{}
 	resp_ := &graphql.Response{Data: data_}
 
 	err_ = client_.MakeRequest(
