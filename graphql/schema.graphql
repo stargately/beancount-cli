@@ -592,6 +592,10 @@ type QueryResultText {
   t: String
 }
 
+type QueryShellTextResult {
+  text: String!
+}
+
 type JournalResponse {
   total: Float!
   data: [JSONObject!]!
@@ -1206,6 +1210,7 @@ type Query {
   listLedgerCollaborators(page: Float, limit: Float, ledgerId: String!): [CollaboratorUser!]!
   getLedgerCollaboratorPermission(ledgerId: String!, collaborator: String!): LedgerCollaborator!
   queryShell(ledgerId: String!, query: String!): QueryResult
+  queryShellText(ledgerId: String!, query: String!): QueryShellTextResult
   getLedgerJournal(query: JournalQueryInput, ledgerId: String!): JournalResponse!
   getLedgerEntryContext(entryHash: String!, ledgerId: String!): EntryContext!
   getLedgerPlaintextJournal(query: PlaintextJournalQueryInput, ledgerId: String!): PlaintextJournalResponse!

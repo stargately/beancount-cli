@@ -692,6 +692,24 @@ type LogoutResponse struct {
 // GetLogout returns LogoutResponse.Logout, and is useful for accessing the field via an interface.
 func (v *LogoutResponse) GetLogout() LogoutLogoutLogoutResponse { return v.Logout }
 
+// QueryShellTextQueryShellTextQueryShellTextResult includes the requested fields of the GraphQL type QueryShellTextResult.
+type QueryShellTextQueryShellTextQueryShellTextResult struct {
+	Text string `json:"text"`
+}
+
+// GetText returns QueryShellTextQueryShellTextQueryShellTextResult.Text, and is useful for accessing the field via an interface.
+func (v *QueryShellTextQueryShellTextQueryShellTextResult) GetText() string { return v.Text }
+
+// QueryShellTextResponse is returned by QueryShellText on success.
+type QueryShellTextResponse struct {
+	QueryShellText *QueryShellTextQueryShellTextQueryShellTextResult `json:"queryShellText"`
+}
+
+// GetQueryShellText returns QueryShellTextResponse.QueryShellText, and is useful for accessing the field via an interface.
+func (v *QueryShellTextResponse) GetQueryShellText() *QueryShellTextQueryShellTextQueryShellTextResult {
+	return v.QueryShellText
+}
+
 // __AddEntryBalanceInput is used internally by genqlient
 type __AddEntryBalanceInput struct {
 	LedgerId string             `json:"ledgerId"`
@@ -847,6 +865,18 @@ type __GetCliAuthSessionInput struct {
 
 // GetSessionId returns __GetCliAuthSessionInput.SessionId, and is useful for accessing the field via an interface.
 func (v *__GetCliAuthSessionInput) GetSessionId() string { return v.SessionId }
+
+// __QueryShellTextInput is used internally by genqlient
+type __QueryShellTextInput struct {
+	LedgerId string `json:"ledgerId"`
+	Query    string `json:"query"`
+}
+
+// GetLedgerId returns __QueryShellTextInput.LedgerId, and is useful for accessing the field via an interface.
+func (v *__QueryShellTextInput) GetLedgerId() string { return v.LedgerId }
+
+// GetQuery returns __QueryShellTextInput.Query, and is useful for accessing the field via an interface.
+func (v *__QueryShellTextInput) GetQuery() string { return v.Query }
 
 // The mutation executed by AddEntryBalance.
 const AddEntryBalance_Operation = `
@@ -1481,6 +1511,42 @@ func Logout(
 	}
 
 	data_ = &LogoutResponse{}
+	resp_ := &graphql.Response{Data: data_}
+
+	err_ = client_.MakeRequest(
+		ctx_,
+		req_,
+		resp_,
+	)
+
+	return data_, err_
+}
+
+// The query executed by QueryShellText.
+const QueryShellText_Operation = `
+query QueryShellText ($ledgerId: String!, $query: String!) {
+	queryShellText(ledgerId: $ledgerId, query: $query) {
+		text
+	}
+}
+`
+
+func QueryShellText(
+	ctx_ context.Context,
+	client_ graphql.Client,
+	ledgerId string,
+	query string,
+) (data_ *QueryShellTextResponse, err_ error) {
+	req_ := &graphql.Request{
+		OpName: "QueryShellText",
+		Query:  QueryShellText_Operation,
+		Variables: &__QueryShellTextInput{
+			LedgerId: ledgerId,
+			Query:    query,
+		},
+	}
+
+	data_ = &QueryShellTextResponse{}
 	resp_ := &graphql.Response{Data: data_}
 
 	err_ = client_.MakeRequest(
