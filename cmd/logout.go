@@ -3,7 +3,6 @@ package cmd
 import (
 	"context"
 	"fmt"
-	"strings"
 
 	"github.com/spf13/cobra"
 
@@ -39,12 +38,9 @@ func runLogout(cmd *cobra.Command, _ []string) error {
 	cfg := config.Load()
 	client := gqlclient.NewAuthed(cfg.APIURL, creds.Token)
 
-	// Revoke the token server-side. If the server rejects the token (already
-	// expired), we still proceed to clear local credentials.
-	_, err = generated.Logout(context.Background(), client)
-	if err != nil && !isAuthError(err) {
-		return fmt.Errorf("logout request failed: %w", err)
-	}
+	// Revoke the token server-side; ignore any server error and always clear
+	// local credentials so the client is never left in a broken state.
+	_, _ = generated.Logout(context.Background(), client)
 
 	if err := credentials.Clear(); err != nil {
 		return fmt.Errorf("failed to clear credentials: %w", err)
@@ -52,9 +48,4 @@ func runLogout(cmd *cobra.Command, _ []string) error {
 
 	fmt.Fprintln(cmd.OutOrStdout(), "Logged out")
 	return nil
-}
-
-// isAuthError reports whether err is an "Not authenticated" response from the server.
-func isAuthError(err error) bool {
-	return strings.Contains(err.Error(), "Not authenticated")
 }
