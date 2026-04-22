@@ -131,3 +131,9 @@ mutation AddEntryDocument($ledgerId: String!, $document: LedgerDocumentInput!) {
     message
   }
 }
+
+query QueryShellText($ledgerId: String!, $query: String!) {
+  queryShellText(ledgerId: $ledgerId, query: $query) {
+    text
+  }
+}
