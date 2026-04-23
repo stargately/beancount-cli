@@ -238,6 +238,32 @@ func (v *AddEntryTransactionResponse) GetAddEntryTransaction() AddEntryTransacti
 	return v.AddEntryTransaction
 }
 
+// AddOrUpdateLedgerCollaboratorAddOrUpdateLedgerCollaboratorAddCollaboratorResponse includes the requested fields of the GraphQL type AddCollaboratorResponse.
+type AddOrUpdateLedgerCollaboratorAddOrUpdateLedgerCollaboratorAddCollaboratorResponse struct {
+	Success bool    `json:"success"`
+	Message *string `json:"message"`
+}
+
+// GetSuccess returns AddOrUpdateLedgerCollaboratorAddOrUpdateLedgerCollaboratorAddCollaboratorResponse.Success, and is useful for accessing the field via an interface.
+func (v *AddOrUpdateLedgerCollaboratorAddOrUpdateLedgerCollaboratorAddCollaboratorResponse) GetSuccess() bool {
+	return v.Success
+}
+
+// GetMessage returns AddOrUpdateLedgerCollaboratorAddOrUpdateLedgerCollaboratorAddCollaboratorResponse.Message, and is useful for accessing the field via an interface.
+func (v *AddOrUpdateLedgerCollaboratorAddOrUpdateLedgerCollaboratorAddCollaboratorResponse) GetMessage() *string {
+	return v.Message
+}
+
+// AddOrUpdateLedgerCollaboratorResponse is returned by AddOrUpdateLedgerCollaborator on success.
+type AddOrUpdateLedgerCollaboratorResponse struct {
+	AddOrUpdateLedgerCollaborator AddOrUpdateLedgerCollaboratorAddOrUpdateLedgerCollaboratorAddCollaboratorResponse `json:"addOrUpdateLedgerCollaborator"`
+}
+
+// GetAddOrUpdateLedgerCollaborator returns AddOrUpdateLedgerCollaboratorResponse.AddOrUpdateLedgerCollaborator, and is useful for accessing the field via an interface.
+func (v *AddOrUpdateLedgerCollaboratorResponse) GetAddOrUpdateLedgerCollaborator() AddOrUpdateLedgerCollaboratorAddOrUpdateLedgerCollaboratorAddCollaboratorResponse {
+	return v.AddOrUpdateLedgerCollaborator
+}
+
 // Budget recurrence interval
 type BudgetInterval string
 
@@ -363,6 +389,32 @@ type CreateLedgerResponse struct {
 
 // GetCreateLedger returns CreateLedgerResponse.CreateLedger, and is useful for accessing the field via an interface.
 func (v *CreateLedgerResponse) GetCreateLedger() CreateLedgerCreateLedger { return v.CreateLedger }
+
+// DeleteLedgerCollaboratorDeleteLedgerCollaboratorDeleteCollaboratorResponse includes the requested fields of the GraphQL type DeleteCollaboratorResponse.
+type DeleteLedgerCollaboratorDeleteLedgerCollaboratorDeleteCollaboratorResponse struct {
+	Success bool    `json:"success"`
+	Message *string `json:"message"`
+}
+
+// GetSuccess returns DeleteLedgerCollaboratorDeleteLedgerCollaboratorDeleteCollaboratorResponse.Success, and is useful for accessing the field via an interface.
+func (v *DeleteLedgerCollaboratorDeleteLedgerCollaboratorDeleteCollaboratorResponse) GetSuccess() bool {
+	return v.Success
+}
+
+// GetMessage returns DeleteLedgerCollaboratorDeleteLedgerCollaboratorDeleteCollaboratorResponse.Message, and is useful for accessing the field via an interface.
+func (v *DeleteLedgerCollaboratorDeleteLedgerCollaboratorDeleteCollaboratorResponse) GetMessage() *string {
+	return v.Message
+}
+
+// DeleteLedgerCollaboratorResponse is returned by DeleteLedgerCollaborator on success.
+type DeleteLedgerCollaboratorResponse struct {
+	DeleteLedgerCollaborator DeleteLedgerCollaboratorDeleteLedgerCollaboratorDeleteCollaboratorResponse `json:"deleteLedgerCollaborator"`
+}
+
+// GetDeleteLedgerCollaborator returns DeleteLedgerCollaboratorResponse.DeleteLedgerCollaborator, and is useful for accessing the field via an interface.
+func (v *DeleteLedgerCollaboratorResponse) GetDeleteLedgerCollaborator() DeleteLedgerCollaboratorDeleteLedgerCollaboratorDeleteCollaboratorResponse {
+	return v.DeleteLedgerCollaborator
+}
 
 // DeleteLedgerDeleteLedgerDeleteLedgerResponse includes the requested fields of the GraphQL type DeleteLedgerResponse.
 type DeleteLedgerDeleteLedgerDeleteLedgerResponse struct {
@@ -756,6 +808,32 @@ func (v *LedgerTransactionInput) GetTags() []string { return v.Tags }
 // GetLinks returns LedgerTransactionInput.Links, and is useful for accessing the field via an interface.
 func (v *LedgerTransactionInput) GetLinks() []string { return v.Links }
 
+// ListLedgerCollaboratorsListLedgerCollaboratorsCollaboratorUser includes the requested fields of the GraphQL type CollaboratorUser.
+type ListLedgerCollaboratorsListLedgerCollaboratorsCollaboratorUser struct {
+	Login      *string `json:"login"`
+	Permission *string `json:"permission"`
+}
+
+// GetLogin returns ListLedgerCollaboratorsListLedgerCollaboratorsCollaboratorUser.Login, and is useful for accessing the field via an interface.
+func (v *ListLedgerCollaboratorsListLedgerCollaboratorsCollaboratorUser) GetLogin() *string {
+	return v.Login
+}
+
+// GetPermission returns ListLedgerCollaboratorsListLedgerCollaboratorsCollaboratorUser.Permission, and is useful for accessing the field via an interface.
+func (v *ListLedgerCollaboratorsListLedgerCollaboratorsCollaboratorUser) GetPermission() *string {
+	return v.Permission
+}
+
+// ListLedgerCollaboratorsResponse is returned by ListLedgerCollaborators on success.
+type ListLedgerCollaboratorsResponse struct {
+	ListLedgerCollaborators []ListLedgerCollaboratorsListLedgerCollaboratorsCollaboratorUser `json:"listLedgerCollaborators"`
+}
+
+// GetListLedgerCollaborators returns ListLedgerCollaboratorsResponse.ListLedgerCollaborators, and is useful for accessing the field via an interface.
+func (v *ListLedgerCollaboratorsResponse) GetListLedgerCollaborators() []ListLedgerCollaboratorsListLedgerCollaboratorsCollaboratorUser {
+	return v.ListLedgerCollaborators
+}
+
 // ListUserOwnedLedgersListUserOwnedLedgersLedger includes the requested fields of the GraphQL type Ledger.
 type ListUserOwnedLedgersListUserOwnedLedgersLedger struct {
 	Id          string  `json:"id"`
@@ -954,6 +1032,22 @@ func (v *__AddEntryTransactionInput) GetLedgerId() string { return v.LedgerId }
 // GetTransaction returns __AddEntryTransactionInput.Transaction, and is useful for accessing the field via an interface.
 func (v *__AddEntryTransactionInput) GetTransaction() LedgerTransactionInput { return v.Transaction }
 
+// __AddOrUpdateLedgerCollaboratorInput is used internally by genqlient
+type __AddOrUpdateLedgerCollaboratorInput struct {
+	LedgerId     string  `json:"ledgerId"`
+	Collaborator string  `json:"collaborator"`
+	Permission   *string `json:"permission"`
+}
+
+// GetLedgerId returns __AddOrUpdateLedgerCollaboratorInput.LedgerId, and is useful for accessing the field via an interface.
+func (v *__AddOrUpdateLedgerCollaboratorInput) GetLedgerId() string { return v.LedgerId }
+
+// GetCollaborator returns __AddOrUpdateLedgerCollaboratorInput.Collaborator, and is useful for accessing the field via an interface.
+func (v *__AddOrUpdateLedgerCollaboratorInput) GetCollaborator() string { return v.Collaborator }
+
+// GetPermission returns __AddOrUpdateLedgerCollaboratorInput.Permission, and is useful for accessing the field via an interface.
+func (v *__AddOrUpdateLedgerCollaboratorInput) GetPermission() *string { return v.Permission }
+
 // __ConsumeCliAuthSessionInput is used internally by genqlient
 type __ConsumeCliAuthSessionInput struct {
 	SessionId string `json:"sessionId"`
@@ -973,6 +1067,18 @@ func (v *__CreateLedgerInput) GetName() string { return v.Name }
 
 // GetDescription returns __CreateLedgerInput.Description, and is useful for accessing the field via an interface.
 func (v *__CreateLedgerInput) GetDescription() *string { return v.Description }
+
+// __DeleteLedgerCollaboratorInput is used internally by genqlient
+type __DeleteLedgerCollaboratorInput struct {
+	LedgerId     string `json:"ledgerId"`
+	Collaborator string `json:"collaborator"`
+}
+
+// GetLedgerId returns __DeleteLedgerCollaboratorInput.LedgerId, and is useful for accessing the field via an interface.
+func (v *__DeleteLedgerCollaboratorInput) GetLedgerId() string { return v.LedgerId }
+
+// GetCollaborator returns __DeleteLedgerCollaboratorInput.Collaborator, and is useful for accessing the field via an interface.
+func (v *__DeleteLedgerCollaboratorInput) GetCollaborator() string { return v.Collaborator }
 
 // __DeleteLedgerEntrySourceSliceInput is used internally by genqlient
 type __DeleteLedgerEntrySourceSliceInput struct {
@@ -1025,6 +1131,14 @@ func (v *__GetLedgerJournalInput) GetLedgerId() string { return v.LedgerId }
 
 // GetQuery returns __GetLedgerJournalInput.Query, and is useful for accessing the field via an interface.
 func (v *__GetLedgerJournalInput) GetQuery() *JournalQueryInput { return v.Query }
+
+// __ListLedgerCollaboratorsInput is used internally by genqlient
+type __ListLedgerCollaboratorsInput struct {
+	LedgerId string `json:"ledgerId"`
+}
+
+// GetLedgerId returns __ListLedgerCollaboratorsInput.LedgerId, and is useful for accessing the field via an interface.
+func (v *__ListLedgerCollaboratorsInput) GetLedgerId() string { return v.LedgerId }
 
 // __QueryShellTextInput is used internally by genqlient
 type __QueryShellTextInput struct {
@@ -1408,6 +1522,45 @@ func AddEntryTransaction(
 	return data_, err_
 }
 
+// The mutation executed by AddOrUpdateLedgerCollaborator.
+const AddOrUpdateLedgerCollaborator_Operation = `
+mutation AddOrUpdateLedgerCollaborator ($ledgerId: String!, $collaborator: String!, $permission: String) {
+	addOrUpdateLedgerCollaborator(ledgerId: $ledgerId, collaborator: $collaborator, permission: $permission) {
+		success
+		message
+	}
+}
+`
+
+func AddOrUpdateLedgerCollaborator(
+	ctx_ context.Context,
+	client_ graphql.Client,
+	ledgerId string,
+	collaborator string,
+	permission *string,
+) (data_ *AddOrUpdateLedgerCollaboratorResponse, err_ error) {
+	req_ := &graphql.Request{
+		OpName: "AddOrUpdateLedgerCollaborator",
+		Query:  AddOrUpdateLedgerCollaborator_Operation,
+		Variables: &__AddOrUpdateLedgerCollaboratorInput{
+			LedgerId:     ledgerId,
+			Collaborator: collaborator,
+			Permission:   permission,
+		},
+	}
+
+	data_ = &AddOrUpdateLedgerCollaboratorResponse{}
+	resp_ := &graphql.Response{Data: data_}
+
+	err_ = client_.MakeRequest(
+		ctx_,
+		req_,
+		resp_,
+	)
+
+	return data_, err_
+}
+
 // The mutation executed by ConsumeCliAuthSession.
 const ConsumeCliAuthSession_Operation = `
 mutation ConsumeCliAuthSession ($sessionId: String!) {
@@ -1538,6 +1691,43 @@ func DeleteLedger(
 	}
 
 	data_ = &DeleteLedgerResponse{}
+	resp_ := &graphql.Response{Data: data_}
+
+	err_ = client_.MakeRequest(
+		ctx_,
+		req_,
+		resp_,
+	)
+
+	return data_, err_
+}
+
+// The mutation executed by DeleteLedgerCollaborator.
+const DeleteLedgerCollaborator_Operation = `
+mutation DeleteLedgerCollaborator ($ledgerId: String!, $collaborator: String!) {
+	deleteLedgerCollaborator(ledgerId: $ledgerId, collaborator: $collaborator) {
+		success
+		message
+	}
+}
+`
+
+func DeleteLedgerCollaborator(
+	ctx_ context.Context,
+	client_ graphql.Client,
+	ledgerId string,
+	collaborator string,
+) (data_ *DeleteLedgerCollaboratorResponse, err_ error) {
+	req_ := &graphql.Request{
+		OpName: "DeleteLedgerCollaborator",
+		Query:  DeleteLedgerCollaborator_Operation,
+		Variables: &__DeleteLedgerCollaboratorInput{
+			LedgerId:     ledgerId,
+			Collaborator: collaborator,
+		},
+	}
+
+	data_ = &DeleteLedgerCollaboratorResponse{}
 	resp_ := &graphql.Response{Data: data_}
 
 	err_ = client_.MakeRequest(
@@ -1717,6 +1907,41 @@ func GetLedgerJournal(
 	}
 
 	data_ = &GetLedgerJournalResponse{}
+	resp_ := &graphql.Response{Data: data_}
+
+	err_ = client_.MakeRequest(
+		ctx_,
+		req_,
+		resp_,
+	)
+
+	return data_, err_
+}
+
+// The query executed by ListLedgerCollaborators.
+const ListLedgerCollaborators_Operation = `
+query ListLedgerCollaborators ($ledgerId: String!) {
+	listLedgerCollaborators(ledgerId: $ledgerId) {
+		login
+		permission
+	}
+}
+`
+
+func ListLedgerCollaborators(
+	ctx_ context.Context,
+	client_ graphql.Client,
+	ledgerId string,
+) (data_ *ListLedgerCollaboratorsResponse, err_ error) {
+	req_ := &graphql.Request{
+		OpName: "ListLedgerCollaborators",
+		Query:  ListLedgerCollaborators_Operation,
+		Variables: &__ListLedgerCollaboratorsInput{
+			LedgerId: ledgerId,
+		},
+	}
+
+	data_ = &ListLedgerCollaboratorsResponse{}
 	resp_ := &graphql.Response{Data: data_}
 
 	err_ = client_.MakeRequest(

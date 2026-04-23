@@ -159,3 +159,24 @@ mutation DeleteLedgerEntrySourceSlice($ledgerId: String!, $input: DeleteSourceSl
     entryHash
   }
 }
+
+query ListLedgerCollaborators($ledgerId: String!) {
+  listLedgerCollaborators(ledgerId: $ledgerId) {
+    login
+    permission
+  }
+}
+
+mutation AddOrUpdateLedgerCollaborator($ledgerId: String!, $collaborator: String!, $permission: String) {
+  addOrUpdateLedgerCollaborator(ledgerId: $ledgerId, collaborator: $collaborator, permission: $permission) {
+    success
+    message
+  }
+}
+
+mutation DeleteLedgerCollaborator($ledgerId: String!, $collaborator: String!) {
+  deleteLedgerCollaborator(ledgerId: $ledgerId, collaborator: $collaborator) {
+    success
+    message
+  }
+}
