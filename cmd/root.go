@@ -12,6 +12,7 @@ import (
 	cmdbalance "beancount.io/beancount-cli/cmd/balance"
 	cmdbudget "beancount.io/beancount-cli/cmd/budget"
 	cmdcheck "beancount.io/beancount-cli/cmd/check"
+	cmdcollaborator "beancount.io/beancount-cli/cmd/collaborator"
 	cmdcommodity "beancount.io/beancount-cli/cmd/commodity"
 	cmddocument "beancount.io/beancount-cli/cmd/document"
 	cmdevent "beancount.io/beancount-cli/cmd/event"
@@ -68,6 +69,7 @@ func Execute() {
 
 func init() {
 	rootCmd.AddCommand(cmdaccount.NewCmdAccount())
+	rootCmd.AddCommand(cmdcollaborator.NewCmdCollaborator())
 	rootCmd.AddCommand(cmdauth.NewCmdLogin())
 	rootCmd.AddCommand(cmdauth.NewCmdLogout())
 	rootCmd.AddCommand(cmdauth.NewCmdWhoami())
