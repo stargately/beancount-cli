@@ -28,14 +28,13 @@ var updateCheckCh <-chan updater.UpdateResult
 var rootCmd = &cobra.Command{
 	Use:   "beancount-cli",
 	Short: "Official CLI for Beancount",
+	// Dev-only environment variables (not shown in help output):
+	//   BEANCOUNT_API_URL               Override the GraphQL endpoint (default: https://beancount.io/api-gateway/)
+	//   BEANCOUNT_DASHBOARD_URL         Override the dashboard URL (default: https://beancount.io)
+	//   BEANCOUNT_NO_UPDATE_NOTIFIER    Set to any value to disable update notifications
 	Long: `beancount-cli is the official command-line interface for Beancount.
 
-Use it to authenticate and interact with your Beancount account.
-
-Environment variables:
-  BEANCOUNT_API_URL               Override the GraphQL endpoint (default: https://beancount.io/api-gateway/)
-  BEANCOUNT_DASHBOARD_URL         Override the dashboard URL (default: https://beancount.io)
-  BEANCOUNT_NO_UPDATE_NOTIFIER    Set to any value to disable update notifications`,
+Use it to authenticate and interact with your beancount.io account.`,
 	// Don't print usage on every RunE error — the error message is sufficient.
 	SilenceUsage: true,
 	PersistentPreRun: func(cmd *cobra.Command, _ []string) {

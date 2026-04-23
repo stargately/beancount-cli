@@ -216,7 +216,7 @@ func (m TransactionListModel) handleKey(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 				m.errTarget = stateList
 				return m, m.loadMoreCmd()
 			}
-		case "enter":
+		case "enter", "l":
 			if len(m.items) > 0 {
 				m.state = stateDetail
 				m.status = ""
@@ -236,7 +236,7 @@ func (m TransactionListModel) handleKey(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 		switch msg.String() {
 		case "q", "ctrl+c":
 			return m, tea.Quit
-		case "esc":
+		case "esc", "h":
 			m.state = stateList
 			m.err = nil
 		case "d":
@@ -421,7 +421,7 @@ func (m TransactionListModel) listView() string {
 	} else {
 		fmt.Fprintf(&sb, "%s\n", dimStyle.Render(fmt.Sprintf("  %d / %d", len(m.items), m.total)))
 	}
-	sb.WriteString(dimStyle.Render("  ↑↓/jk navigate   enter detail   r refresh   q quit"))
+	sb.WriteString(dimStyle.Render("  ↑↓/jk navigate   l/enter detail   r refresh   q quit"))
 
 	return sb.String()
 }
@@ -463,7 +463,7 @@ func (m TransactionListModel) detailView() string {
 		sb.WriteString("\n" + errorStyle.Render("  Error: "+m.err.Error()) + "\n")
 	}
 
-	sb.WriteString("\n" + dimStyle.Render("  d delete   esc back   q quit"))
+	sb.WriteString("\n" + dimStyle.Render("  d delete   h/esc back   q quit"))
 	return sb.String()
 }
 
