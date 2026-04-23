@@ -3,8 +3,24 @@ package cmd
 import (
 	"os"
 
-	"beancount.io/beancount-cli/internal/updater"
 	"github.com/spf13/cobra"
+
+	"beancount.io/beancount-cli/internal/updater"
+
+	cmdaccount "beancount.io/beancount-cli/cmd/account"
+	cmdauth "beancount.io/beancount-cli/cmd/auth"
+	cmdbalance "beancount.io/beancount-cli/cmd/balance"
+	cmdbudget "beancount.io/beancount-cli/cmd/budget"
+	cmdcheck "beancount.io/beancount-cli/cmd/check"
+	cmdcommodity "beancount.io/beancount-cli/cmd/commodity"
+	cmddocument "beancount.io/beancount-cli/cmd/document"
+	cmdevent "beancount.io/beancount-cli/cmd/event"
+	cmdledger "beancount.io/beancount-cli/cmd/ledger"
+	cmdnote "beancount.io/beancount-cli/cmd/note"
+	cmdprice "beancount.io/beancount-cli/cmd/price"
+	cmdquery "beancount.io/beancount-cli/cmd/query"
+	cmdtransaction "beancount.io/beancount-cli/cmd/transaction"
+	cmdupgrade "beancount.io/beancount-cli/cmd/upgrade"
 )
 
 var updateCheckCh <-chan updater.UpdateResult
@@ -49,4 +65,24 @@ func Execute() {
 	if err := rootCmd.Execute(); err != nil {
 		os.Exit(1)
 	}
+}
+
+func init() {
+	rootCmd.AddCommand(cmdaccount.NewCmdAccount())
+	rootCmd.AddCommand(cmdauth.NewCmdLogin())
+	rootCmd.AddCommand(cmdauth.NewCmdLogout())
+	rootCmd.AddCommand(cmdauth.NewCmdWhoami())
+	rootCmd.AddCommand(cmdbalance.NewCmdBalance())
+	rootCmd.AddCommand(cmdbudget.NewCmdBudget())
+	rootCmd.AddCommand(cmdcheck.NewCmdCheck())
+	rootCmd.AddCommand(cmdcommodity.NewCmdCommodity())
+	rootCmd.AddCommand(cmddocument.NewCmdDocument())
+	rootCmd.AddCommand(cmdevent.NewCmdEvent())
+	rootCmd.AddCommand(cmdledger.NewCmdLedger())
+	rootCmd.AddCommand(cmdnote.NewCmdNote())
+	rootCmd.AddCommand(cmdprice.NewCmdPrice())
+	rootCmd.AddCommand(cmdquery.NewCmdBeanQuery())
+	rootCmd.AddCommand(cmdquery.NewCmdQuery())
+	rootCmd.AddCommand(cmdtransaction.NewCmdTransaction())
+	rootCmd.AddCommand(cmdupgrade.NewCmdUpgrade(&rootCmd.Version))
 }
