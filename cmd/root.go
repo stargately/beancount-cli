@@ -15,6 +15,7 @@ import (
 	cmdcollaborator "beancount.io/beancount-cli/cmd/collaborator"
 	cmdcommodity "beancount.io/beancount-cli/cmd/commodity"
 	cmddocument "beancount.io/beancount-cli/cmd/document"
+	cmderror "beancount.io/beancount-cli/cmd/error"
 	cmdevent "beancount.io/beancount-cli/cmd/event"
 	cmdledger "beancount.io/beancount-cli/cmd/ledger"
 	cmdnote "beancount.io/beancount-cli/cmd/note"
@@ -79,6 +80,7 @@ func init() {
 	rootCmd.AddCommand(cmdcommodity.NewCmdCommodity())
 	rootCmd.AddCommand(cmddocument.NewCmdDocument())
 	rootCmd.AddCommand(cmdevent.NewCmdEvent())
+	rootCmd.AddCommand(cmderror.NewCmdError())
 	rootCmd.AddCommand(cmdledger.NewCmdLedger())
 	rootCmd.AddCommand(cmdnote.NewCmdNote())
 	rootCmd.AddCommand(cmdprice.NewCmdPrice())

@@ -180,3 +180,11 @@ mutation DeleteLedgerCollaborator($ledgerId: String!, $collaborator: String!) {
     message
   }
 }
+
+query GetLedgerErrors($ledgerId: String!) {
+  getLedgerErrors(ledgerId: $ledgerId) {
+    filename
+    lineno
+    message
+  }
+}

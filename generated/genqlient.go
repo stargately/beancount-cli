@@ -543,6 +543,32 @@ func (v *GetLedgerEntryContextResponse) GetGetLedgerEntryContext() GetLedgerEntr
 	return v.GetLedgerEntryContext
 }
 
+// GetLedgerErrorsGetLedgerErrorsBeancountError includes the requested fields of the GraphQL type BeancountError.
+type GetLedgerErrorsGetLedgerErrorsBeancountError struct {
+	Filename *string  `json:"filename"`
+	Lineno   *float64 `json:"lineno"`
+	Message  string   `json:"message"`
+}
+
+// GetFilename returns GetLedgerErrorsGetLedgerErrorsBeancountError.Filename, and is useful for accessing the field via an interface.
+func (v *GetLedgerErrorsGetLedgerErrorsBeancountError) GetFilename() *string { return v.Filename }
+
+// GetLineno returns GetLedgerErrorsGetLedgerErrorsBeancountError.Lineno, and is useful for accessing the field via an interface.
+func (v *GetLedgerErrorsGetLedgerErrorsBeancountError) GetLineno() *float64 { return v.Lineno }
+
+// GetMessage returns GetLedgerErrorsGetLedgerErrorsBeancountError.Message, and is useful for accessing the field via an interface.
+func (v *GetLedgerErrorsGetLedgerErrorsBeancountError) GetMessage() string { return v.Message }
+
+// GetLedgerErrorsResponse is returned by GetLedgerErrors on success.
+type GetLedgerErrorsResponse struct {
+	GetLedgerErrors []GetLedgerErrorsGetLedgerErrorsBeancountError `json:"getLedgerErrors"`
+}
+
+// GetGetLedgerErrors returns GetLedgerErrorsResponse.GetLedgerErrors, and is useful for accessing the field via an interface.
+func (v *GetLedgerErrorsResponse) GetGetLedgerErrors() []GetLedgerErrorsGetLedgerErrorsBeancountError {
+	return v.GetLedgerErrors
+}
+
 // GetLedgerJournalGetLedgerJournalJournalResponse includes the requested fields of the GraphQL type JournalResponse.
 type GetLedgerJournalGetLedgerJournalJournalResponse struct {
 	Total    float64       `json:"total"`
@@ -1119,6 +1145,14 @@ func (v *__GetLedgerEntryContextInput) GetLedgerId() string { return v.LedgerId 
 
 // GetEntryHash returns __GetLedgerEntryContextInput.EntryHash, and is useful for accessing the field via an interface.
 func (v *__GetLedgerEntryContextInput) GetEntryHash() string { return v.EntryHash }
+
+// __GetLedgerErrorsInput is used internally by genqlient
+type __GetLedgerErrorsInput struct {
+	LedgerId string `json:"ledgerId"`
+}
+
+// GetLedgerId returns __GetLedgerErrorsInput.LedgerId, and is useful for accessing the field via an interface.
+func (v *__GetLedgerErrorsInput) GetLedgerId() string { return v.LedgerId }
 
 // __GetLedgerJournalInput is used internally by genqlient
 type __GetLedgerJournalInput struct {
@@ -1869,6 +1903,42 @@ func GetLedgerEntryContext(
 	}
 
 	data_ = &GetLedgerEntryContextResponse{}
+	resp_ := &graphql.Response{Data: data_}
+
+	err_ = client_.MakeRequest(
+		ctx_,
+		req_,
+		resp_,
+	)
+
+	return data_, err_
+}
+
+// The query executed by GetLedgerErrors.
+const GetLedgerErrors_Operation = `
+query GetLedgerErrors ($ledgerId: String!) {
+	getLedgerErrors(ledgerId: $ledgerId) {
+		filename
+		lineno
+		message
+	}
+}
+`
+
+func GetLedgerErrors(
+	ctx_ context.Context,
+	client_ graphql.Client,
+	ledgerId string,
+) (data_ *GetLedgerErrorsResponse, err_ error) {
+	req_ := &graphql.Request{
+		OpName: "GetLedgerErrors",
+		Query:  GetLedgerErrors_Operation,
+		Variables: &__GetLedgerErrorsInput{
+			LedgerId: ledgerId,
+		},
+	}
+
+	data_ = &GetLedgerErrorsResponse{}
 	resp_ := &graphql.Response{Data: data_}
 
 	err_ = client_.MakeRequest(
