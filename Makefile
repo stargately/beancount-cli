@@ -18,14 +18,10 @@ build:
 codegen:
 	go generate ./...
 
-## update-schema: re-introspect the live API and regenerate the GraphQL client
+## update-schema: download the SDL schema from the live API and regenerate the GraphQL client
 update-schema:
-	@command -v python3 >/dev/null 2>&1 || { echo "python3 required for schema download"; exit 1; }
-	@echo "Introspecting $(BEANCOUNT_API_URL)$(if $(BEANCOUNT_API_URL),,https://beancount.io/api-gateway/)..."
-	curl -s -X POST "$${BEANCOUNT_API_URL:-https://beancount.io/api-gateway/}" \
-	  -H "Content-Type: application/json" \
-	  -d '{"query":"fragment FullType on __Type { kind name description fields(includeDeprecated: true) { name description args { ...InputValue } type { ...TypeRef } isDeprecated deprecationReason } inputFields { ...InputValue } interfaces { ...TypeRef } enumValues(includeDeprecated: true) { name description isDeprecated deprecationReason } possibleTypes { ...TypeRef } } fragment InputValue on __InputValue { name description type { ...TypeRef } defaultValue } fragment TypeRef on __Type { kind name ofType { kind name ofType { kind name ofType { kind name ofType { kind name ofType { kind name ofType { kind name ofType { kind name } } } } } } } } query IntrospectionQuery { __schema { queryType { name } mutationType { name } subscriptionType { name } types { ...FullType } directives { name description locations args { ...InputValue } } } }"}' \
-	  | python3 scripts/introspection-to-sdl.py > graphql/schema.graphql
+	@echo "Downloading schema from https://beancount.io/api-gateway/schema.graphql..."
+	curl -sf "https://beancount.io/api-gateway/schema.graphql" > graphql/schema.graphql
 	$(MAKE) codegen
 	@echo "Schema updated and client regenerated."
 
