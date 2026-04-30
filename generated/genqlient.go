@@ -22,6 +22,7 @@ func (v *AddEntryBalanceAddEntryBalanceAddLedgerEntryResponse) GetMessage() *str
 
 // AddEntryBalanceResponse is returned by AddEntryBalance on success.
 type AddEntryBalanceResponse struct {
+	// Add a new balance entry to a specific ledger
 	AddEntryBalance AddEntryBalanceAddEntryBalanceAddLedgerEntryResponse `json:"addEntryBalance"`
 }
 
@@ -44,6 +45,7 @@ func (v *AddEntryBudgetAddEntryBudgetAddLedgerEntryResponse) GetMessage() *strin
 
 // AddEntryBudgetResponse is returned by AddEntryBudget on success.
 type AddEntryBudgetResponse struct {
+	// Add a budget custom directive entry to a specific ledger
 	AddEntryBudget AddEntryBudgetAddEntryBudgetAddLedgerEntryResponse `json:"addEntryBudget"`
 }
 
@@ -66,6 +68,7 @@ func (v *AddEntryCloseAddEntryCloseAddLedgerEntryResponse) GetMessage() *string 
 
 // AddEntryCloseResponse is returned by AddEntryClose on success.
 type AddEntryCloseResponse struct {
+	// Add a new close account entry to a specific ledger
 	AddEntryClose AddEntryCloseAddEntryCloseAddLedgerEntryResponse `json:"addEntryClose"`
 }
 
@@ -92,6 +95,7 @@ func (v *AddEntryCommodityAddEntryCommodityAddLedgerEntryResponse) GetMessage() 
 
 // AddEntryCommodityResponse is returned by AddEntryCommodity on success.
 type AddEntryCommodityResponse struct {
+	// Add a new commodity entry to a specific ledger
 	AddEntryCommodity AddEntryCommodityAddEntryCommodityAddLedgerEntryResponse `json:"addEntryCommodity"`
 }
 
@@ -116,6 +120,7 @@ func (v *AddEntryDocumentAddEntryDocumentAddLedgerEntryResponse) GetMessage() *s
 
 // AddEntryDocumentResponse is returned by AddEntryDocument on success.
 type AddEntryDocumentResponse struct {
+	// Add a document directive entry to a specific ledger
 	AddEntryDocument AddEntryDocumentAddEntryDocumentAddLedgerEntryResponse `json:"addEntryDocument"`
 }
 
@@ -138,6 +143,7 @@ func (v *AddEntryEventAddEntryEventAddLedgerEntryResponse) GetMessage() *string 
 
 // AddEntryEventResponse is returned by AddEntryEvent on success.
 type AddEntryEventResponse struct {
+	// Add an event directive entry to a specific ledger
 	AddEntryEvent AddEntryEventAddEntryEventAddLedgerEntryResponse `json:"addEntryEvent"`
 }
 
@@ -160,6 +166,7 @@ func (v *AddEntryNoteAddEntryNoteAddLedgerEntryResponse) GetMessage() *string { 
 
 // AddEntryNoteResponse is returned by AddEntryNote on success.
 type AddEntryNoteResponse struct {
+	// Add a new note entry to a specific ledger
 	AddEntryNote AddEntryNoteAddEntryNoteAddLedgerEntryResponse `json:"addEntryNote"`
 }
 
@@ -182,6 +189,7 @@ func (v *AddEntryOpenAddEntryOpenAddLedgerEntryResponse) GetMessage() *string { 
 
 // AddEntryOpenResponse is returned by AddEntryOpen on success.
 type AddEntryOpenResponse struct {
+	// Add a new open account entry to a specific ledger
 	AddEntryOpen AddEntryOpenAddEntryOpenAddLedgerEntryResponse `json:"addEntryOpen"`
 }
 
@@ -204,6 +212,7 @@ func (v *AddEntryPriceAddEntryPriceAddLedgerEntryResponse) GetMessage() *string 
 
 // AddEntryPriceResponse is returned by AddEntryPrice on success.
 type AddEntryPriceResponse struct {
+	// Add a new price entry to a specific ledger
 	AddEntryPrice AddEntryPriceAddEntryPriceAddLedgerEntryResponse `json:"addEntryPrice"`
 }
 
@@ -230,6 +239,7 @@ func (v *AddEntryTransactionAddEntryTransactionAddLedgerEntryResponse) GetMessag
 
 // AddEntryTransactionResponse is returned by AddEntryTransaction on success.
 type AddEntryTransactionResponse struct {
+	// Add a new transaction entry to a specific ledger
 	AddEntryTransaction AddEntryTransactionAddEntryTransactionAddLedgerEntryResponse `json:"addEntryTransaction"`
 }
 
@@ -320,6 +330,7 @@ func (v *ConsumeCliAuthSessionConsumeCliAuthSessionConsumeCliAuthSessionResponse
 
 // ConsumeCliAuthSessionResponse is returned by ConsumeCliAuthSession on success.
 type ConsumeCliAuthSessionResponse struct {
+	// Retrieve and consume the token from an authorized CLI auth session. Single-use: clears the token from the session after returning it. Only the CLI should call this.
 	ConsumeCliAuthSession ConsumeCliAuthSessionConsumeCliAuthSessionConsumeCliAuthSessionResponse `json:"consumeCliAuthSession"`
 }
 
@@ -346,6 +357,7 @@ func (v *CreateCliAuthSessionCreateCliAuthSessionCreateCliAuthSessionResponse) G
 
 // CreateCliAuthSessionResponse is returned by CreateCliAuthSession on success.
 type CreateCliAuthSessionResponse struct {
+	// Initiate a CLI authentication session. Returns a sessionId the CLI uses to poll for completion.
 	CreateCliAuthSession CreateCliAuthSessionCreateCliAuthSessionCreateCliAuthSessionResponse `json:"createCliAuthSession"`
 }
 
@@ -384,6 +396,7 @@ func (v *CreateLedgerCreateLedger) GetCreatedAt() string { return v.CreatedAt }
 
 // CreateLedgerResponse is returned by CreateLedger on success.
 type CreateLedgerResponse struct {
+	// Create a new ledger for the current user
 	CreateLedger CreateLedgerCreateLedger `json:"createLedger"`
 }
 
@@ -442,6 +455,7 @@ func (v *DeleteLedgerEntrySourceSliceDeleteLedgerEntrySourceSliceDeleteSourceSli
 
 // DeleteLedgerEntrySourceSliceResponse is returned by DeleteLedgerEntrySourceSlice on success.
 type DeleteLedgerEntrySourceSliceResponse struct {
+	// Delete a source slice for a specific journal entry
 	DeleteLedgerEntrySourceSlice DeleteLedgerEntrySourceSliceDeleteLedgerEntrySourceSliceDeleteSourceSliceResponse `json:"deleteLedgerEntrySourceSlice"`
 }
 
@@ -452,6 +466,7 @@ func (v *DeleteLedgerEntrySourceSliceResponse) GetDeleteLedgerEntrySourceSlice()
 
 // DeleteLedgerResponse is returned by DeleteLedger on success.
 type DeleteLedgerResponse struct {
+	// Delete a specific ledger
 	DeleteLedger DeleteLedgerDeleteLedgerDeleteLedgerResponse `json:"deleteLedger"`
 }
 
@@ -483,6 +498,7 @@ func (v *GetCliAuthSessionGetCliAuthSessionGetCliAuthSessionResponse) GetStatus(
 
 // GetCliAuthSessionResponse is returned by GetCliAuthSession on success.
 type GetCliAuthSessionResponse struct {
+	// Poll the status of a CLI authentication session. When AUTHORIZED, returns the token stored in the session.
 	GetCliAuthSession GetCliAuthSessionGetCliAuthSessionGetCliAuthSessionResponse `json:"getCliAuthSession"`
 }
 
@@ -493,6 +509,7 @@ func (v *GetCliAuthSessionResponse) GetGetCliAuthSession() GetCliAuthSessionGetC
 
 // GetCurrentUserResponse is returned by GetCurrentUser on success.
 type GetCurrentUserResponse struct {
+	// get the user
 	UserProfile *GetCurrentUserUserProfileUserProfileResponse `json:"userProfile"`
 }
 
@@ -535,6 +552,7 @@ func (v *GetLedgerEntryContextGetLedgerEntryContext) GetSlice() string { return 
 
 // GetLedgerEntryContextResponse is returned by GetLedgerEntryContext on success.
 type GetLedgerEntryContextResponse struct {
+	// Get context for a specific journal entry
 	GetLedgerEntryContext GetLedgerEntryContextGetLedgerEntryContext `json:"getLedgerEntryContext"`
 }
 
@@ -561,6 +579,7 @@ func (v *GetLedgerErrorsGetLedgerErrorsBeancountError) GetMessage() string { ret
 
 // GetLedgerErrorsResponse is returned by GetLedgerErrors on success.
 type GetLedgerErrorsResponse struct {
+	// Get all errors from the ledger
 	GetLedgerErrors []GetLedgerErrorsGetLedgerErrorsBeancountError `json:"getLedgerErrors"`
 }
 
@@ -587,6 +606,7 @@ func (v *GetLedgerJournalGetLedgerJournalJournalResponse) GetIs_empty() bool { r
 
 // GetLedgerJournalResponse is returned by GetLedgerJournal on success.
 type GetLedgerJournalResponse struct {
+	// Get journal entries for a specific ledger
 	GetLedgerJournal GetLedgerJournalGetLedgerJournalJournalResponse `json:"getLedgerJournal"`
 }
 
@@ -896,6 +916,7 @@ func (v *ListUserOwnedLedgersListUserOwnedLedgersLedger) GetUpdatedAt() string {
 
 // ListUserOwnedLedgersResponse is returned by ListUserOwnedLedgers on success.
 type ListUserOwnedLedgersResponse struct {
+	// List all user owned ledgers for the current user
 	ListUserOwnedLedgers []ListUserOwnedLedgersListUserOwnedLedgersLedger `json:"listUserOwnedLedgers"`
 }
 
@@ -914,6 +935,7 @@ func (v *LogoutLogoutLogoutResponse) GetSuccess() bool { return v.Success }
 
 // LogoutResponse is returned by Logout on success.
 type LogoutResponse struct {
+	// Logout user, revoke JWT token and clear httpOnly cookie
 	Logout LogoutLogoutLogoutResponse `json:"logout"`
 }
 
@@ -930,6 +952,7 @@ func (v *QueryShellTextQueryShellTextQueryShellTextResult) GetText() string { re
 
 // QueryShellTextResponse is returned by QueryShellText on success.
 type QueryShellTextResponse struct {
+	// Execute a shell query on a ledger and return plain text output
 	QueryShellText *QueryShellTextQueryShellTextQueryShellTextResult `json:"queryShellText"`
 }
 
